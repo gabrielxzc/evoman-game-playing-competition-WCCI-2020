@@ -1,2 +1,3 @@
-# evoman-game-playing-competition-for-WCCI-2020
-http://pesquisa.ufabc.edu.br/hal/Evoman.html
+# Evoman game playing competition - WCCI 2020
+
+Competition website: http://pesquisa.ufabc.edu.br/hal/Evoman.html
