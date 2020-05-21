@@ -1,0 +1,8 @@
+# IDEs
+
+.idea/
+
+# Python
+
+venv/
+__pycache__/
