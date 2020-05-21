@@ -8,6 +8,7 @@ from pso_bootstrap.pso.algorithm import PsoAlgorithm
 from pso_bootstrap.pso.parameters import PsoParameters
 
 from pso_bootstrap.evoman_pso.parameters import EvomanPsoParameters
+from pso_bootstrap.evoman_pso.solution import EvomanPsoSolution
 
 import utils.keras as keras_utils
 
@@ -35,6 +36,9 @@ class EvomanPsoAlgorithm:
 
         pso_algorithm = PsoAlgorithm(pso_parameters)
         pso_solution = pso_algorithm.train()
+
+        return EvomanPsoSolution(pso_solution.particle_state, pso_solution.particle_fitness,
+                                 self._evoman_pso_parameters)
 
     def _generate_particle_state(self):
         model = self._get_model()
