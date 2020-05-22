@@ -1,6 +1,6 @@
 source ../venv/bin/activate
 
-NR_OF_EXPERIMENTS_TO_RUN=2
+NR_OF_EXPERIMENTS_TO_RUN=30
 
 printf "Please run this script from the root folder of this repository\n"
 printf "e.g. ~/evoman-game-playing-competition$ scripts/pso_bootstrap.sh"
