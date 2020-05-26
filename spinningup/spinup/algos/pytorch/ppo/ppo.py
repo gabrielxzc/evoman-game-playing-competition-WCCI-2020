@@ -305,13 +305,17 @@ def ppo(actor_critic=core.MLPActorCritic, ac_kwargs=dict(), seed=0, steps_per_ep
                 player_controller = ReinforcementLearningEvomanPlayerController(evoman_environment, buf, logger)
                 evoman_environment.player_controller = player_controller
 
-                evoman_environment.play(pcont=ac)
+                _, player_life, enemy_life, _ = evoman_environment.play(pcont=ac)
 
-                if player_controller.are_all_timesteps_saved:
+                if player_controller.are_all_timesteps_saved and (player_life == 0 or enemy_life == 0):
                     v = 0
                 else:
-                    _, v, _ = ac.step(
-                        torch.as_tensor(player_controller.first_not_saved_observation, dtype=torch.float32))
+                    if not player_controller.are_all_timesteps_saved:
+                        _, v, _ = ac.step(
+                            torch.as_tensor(player_controller.first_not_saved_observation, dtype=torch.float32))
+                    else:
+                        _, v, _ = ac.step(
+                            torch.as_tensor(player_controller.previous_observation, dtype=torch.float32))
 
                 buf.finish_path(v)
 

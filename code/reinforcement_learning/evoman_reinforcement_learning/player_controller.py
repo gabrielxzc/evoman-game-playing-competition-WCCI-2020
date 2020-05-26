@@ -14,7 +14,7 @@ class ReinforcementLearningEvomanPlayerController(EvomanPlayerController):
         self.first_not_saved_observation = None
 
         self._is_first_observation = True
-        self._previous_observation = None
+        self.previous_observation = None
         self._previous_action = None
         self._previous_v = None
         self._previous_logp = None
@@ -32,7 +32,7 @@ class ReinforcementLearningEvomanPlayerController(EvomanPlayerController):
         else:
             self._update_buf()
 
-        self._previous_observation = np.array(observation, dtype=np.float32)
+        self.previous_observation = np.array(observation, dtype=np.float32)
         self._previous_action = a
         self._previous_v = v
         self._previous_logp = logp
@@ -42,12 +42,12 @@ class ReinforcementLearningEvomanPlayerController(EvomanPlayerController):
     def _update_buf(self):
         try:
             reward = self._evoman_environment.get_reward()
-            self._buf.store(self._previous_observation, self._previous_action,
+            self._buf.store(self.previous_observation, self._previous_action,
                             reward, self._previous_v, self._previous_logp)
 
             self.episode_ret += reward
         except AssertionError:
             if self.are_all_timesteps_saved:
-                self.first_not_saved_observation = self._previous_observation
+                self.first_not_saved_observation = self.previous_observation
 
             self.are_all_timesteps_saved = False
