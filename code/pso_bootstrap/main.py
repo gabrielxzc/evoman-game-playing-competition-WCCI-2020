@@ -3,7 +3,7 @@
 import sys
 import os
 
-is_running_from_command_line = len(sys.path) <= 6
+is_running_from_command_line = len(sys.path) <= 7
 if is_running_from_command_line:
     script_path_tokens = sys.path[0].split(os.sep)
     sys.path.extend([os.path.join('/', *script_path_tokens[:-1]),
