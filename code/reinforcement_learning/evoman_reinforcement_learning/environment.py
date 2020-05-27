@@ -12,7 +12,7 @@ class ReinforcementLearningEvomanEnvironment(EvomanEnvironmentWrapper):
         self.player_previous_life = 100
         self.enemy_previous_life = 100
 
-        super().play(pcont, econt)
+        return super().play(pcont, econt)
 
     def get_reward(self):
         reward = (self.player.life - self.player_previous_life) + (self.enemy_previous_life - self.enemy.life)

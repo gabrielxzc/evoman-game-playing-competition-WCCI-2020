@@ -42,4 +42,5 @@ ppo(ac_kwargs={'hidden_sizes': parameters.MODEL_HIDDEN_LAYERS_SIZES, 'activation
     enemies=parameters.ENEMIES_CHOSEN_FOR_TRAINING, enemy_difficulty=parameters.ENEMIES_DIFFICULTY_LEVEL,
     gamma=parameters.GAMMA, clip_ratio=parameters.CLIP_RATIO, pi_lr=parameters.PI_LR, vf_lr=parameters.VF_LR,
     train_pi_iters=parameters.TRAIN_PI_ITERATIONS, train_v_iters=parameters.TRAIN_V_ITERATIONS, lam=parameters.LAMBDA,
-    target_kl=parameters.TARGET_KL, logger_kwargs=logger_kwargs, save_freq=parameters.SAVE_FREQ)
+    target_kl=parameters.TARGET_KL, logger_kwargs=logger_kwargs, save_freq=parameters.SAVE_FREQ,
+    starting_actor_critic=parameters.STARTING_MODEL_PATH)

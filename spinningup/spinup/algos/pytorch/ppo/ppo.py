@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import torch
 from torch.optim import Adam
 import gym
@@ -90,7 +91,7 @@ class PPOBuffer:
 
 def ppo(actor_critic=core.MLPActorCritic, ac_kwargs=dict(), seed=0, steps_per_epoch=4000, epochs=50,
         enemies=[1, 4, 6, 7], enemy_difficulty=5, gamma=0.99, clip_ratio=0.2, pi_lr=3e-4, vf_lr=1e-3, train_pi_iters=80,
-        train_v_iters=80, lam=0.97, target_kl=0.01, logger_kwargs=dict(), save_freq=10):
+        train_v_iters=80, lam=0.97, target_kl=0.01, logger_kwargs=dict(), save_freq=10, starting_actor_critic=None):
     """
     Proximal Policy Optimization (by clipping), 
 
@@ -211,7 +212,10 @@ def ppo(actor_critic=core.MLPActorCritic, ac_kwargs=dict(), seed=0, steps_per_ep
     act_dim = action_space.shape
 
     # Create actor-critic module
-    ac = actor_critic(observation_space, action_space, **ac_kwargs)
+    if starting_actor_critic is None:
+        ac = actor_critic(observation_space, action_space, **ac_kwargs)
+    else:
+        ac = torch.load(os.path.join(starting_actor_critic, "pyt_save", "model.pt"))
 
     # Sync params across processes
     sync_params(ac)
