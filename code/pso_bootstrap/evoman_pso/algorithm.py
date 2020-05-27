@@ -67,8 +67,7 @@ class EvomanPsoAlgorithm:
         evoman_environment = EvomanEnvironmentWrapper('evoman pso bootstrap',
                                                       player_controller=KerasModelPlayerController(),
                                                       enemies=self._evoman_pso_parameters.enemies_chosen_for_training,
-                                                      multiplemode="yes",
-                                                      level=self._evoman_pso_parameters.enemies_difficulty_level)
+                                                      multiplemode="yes")
 
         fitness, _, _, _ = evoman_environment.play(pcont=model)
         return fitness

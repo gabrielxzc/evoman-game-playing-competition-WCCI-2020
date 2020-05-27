@@ -1,12 +1,11 @@
 class EvomanPsoParameters:
-    def __init__(self, enemies_chosen_for_training, enemies_difficulty_level, model_hidden_layers_sizes,
-                 model_min_weight, model_max_weight, pop_size, nr_iterations, inertia_initial_weight, cognitive_weight,
-                 social_weight, min_particle_speed, max_particle_speed, thread_pool_size=1):
+    def __init__(self, enemies_chosen_for_training, model_hidden_layers_sizes, model_min_weight, model_max_weight,
+                 pop_size, nr_iterations, inertia_initial_weight, cognitive_weight, social_weight, min_particle_speed,
+                 max_particle_speed, thread_pool_size=1):
         assert isinstance(enemies_chosen_for_training, list) and len(enemies_chosen_for_training) == 4, \
             'As stated in the competition rules, 4 enemies must be chosen for training'
 
         self.enemies_chosen_for_training = enemies_chosen_for_training
-        self.enemies_difficulty_level = enemies_difficulty_level
 
         self.model_hidden_layers_sizes = model_hidden_layers_sizes
         self.model_min_weight = model_min_weight

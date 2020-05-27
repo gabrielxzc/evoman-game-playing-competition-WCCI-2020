@@ -31,7 +31,6 @@ from utils.pickle import save_class_instance
 if __name__ == '__main__':
     evoman_pso_parameters = EvomanPsoParameters(
         enemies_chosen_for_training=parameters.ENEMIES_CHOSEN_FOR_TRAINING,
-        enemies_difficulty_level=parameters.ENEMIES_DIFFICULTY_LEVEL,
         model_hidden_layers_sizes=parameters.MODEL_HIDDEN_LAYERS_SIZES,
         model_min_weight=parameters.MODEL_MIN_WEIGHT,
         model_max_weight=parameters.MODEL_MAX_WEIGHT,
@@ -49,7 +48,7 @@ if __name__ == '__main__':
     evoman_pso_solution = evoman_pso_algorithm.train()
 
     evoman_pso_parameters.enemies_chosen_for_training.sort()
-    pso_bootstrap_trained_models_dir = f'../trained_models/pso_bootstrap/{evoman_pso_parameters.enemies_chosen_for_training}_{evoman_pso_parameters.enemies_difficulty_level}'
+    pso_bootstrap_trained_models_dir = f'../trained_models/pso_bootstrap/{evoman_pso_parameters.enemies_chosen_for_training}'
     pso_bootstrap_trained_model_name = f'{evoman_pso_solution.model_fitness:.2f}'
 
     save_class_instance(evoman_pso_solution, pso_bootstrap_trained_models_dir, pso_bootstrap_trained_model_name,
