@@ -1,3 +1,5 @@
-MODEL_PATH = '../trained_models/reinforcement_learning/1590490815.9601488'
+ENEMIES_CHOSEN_FOR_TESTING = range(1, 9)
+NR_EXPERIMENTS_FOR_EACH_ENEMY = 30
+ENEMIES_DIFFICULTY = 2
 
-ENEMIES_DIFFICULTY = 5
+MODEL_PATH = '../trained_models/reinforcement_learning/1590490815.9601488'
