@@ -51,3 +51,6 @@ class ReinforcementLearningEvomanPlayerController(EvomanPlayerController):
                 self.first_not_saved_observation = self.previous_observation
 
             self.are_all_timesteps_saved = False
+
+    def finish_path(self):
+        self._update_buf()

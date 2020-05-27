@@ -310,6 +310,7 @@ def ppo(actor_critic=core.MLPActorCritic, ac_kwargs=dict(), seed=0, steps_per_ep
                 evoman_environment.player_controller = player_controller
 
                 _, player_life, enemy_life, _ = evoman_environment.play(pcont=ac)
+                player_controller.finish_path()
 
                 if player_controller.are_all_timesteps_saved and (player_life == 0 or enemy_life == 0):
                     v = 0

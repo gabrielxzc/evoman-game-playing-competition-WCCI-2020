@@ -37,7 +37,8 @@ for enemy in range(1, 9):
     evoman_environment = EvomanEnvironmentWrapper('evoman rl test',
                                                   player_controller=TestReinforcementLearningEvomanPlayerController(),
                                                   enemies=[enemy],
-                                                  level=parameters.ENEMIES_DIFFICULTY)
+                                                  level=parameters.ENEMIES_DIFFICULTY,
+                                                  speed="normal")
     _, player_life, enemy_life, time = evoman_environment.play(pcont=model)
     gains.append(100.01 + player_life - enemy_life)
     results.append([enemy, player_life, enemy_life])
