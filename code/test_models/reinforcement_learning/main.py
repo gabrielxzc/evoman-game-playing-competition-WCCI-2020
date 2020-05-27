@@ -37,12 +37,13 @@ for enemy in range(1, 9):
     evoman_environment = EvomanEnvironmentWrapper('evoman rl test',
                                                   player_controller=TestReinforcementLearningEvomanPlayerController(),
                                                   enemies=[enemy],
-                                                  level=5)
+                                                  level=parameters.ENEMIES_DIFFICULTY)
     _, player_life, enemy_life, time = evoman_environment.play(pcont=model)
     gains.append(100.01 + player_life - enemy_life)
     results.append([enemy, player_life, enemy_life])
 
-print(f'\nThis model has a score for the competition of {len(gains) / np.sum(1.0 / np.array(gains)):.2f}/200.01\n')
+print(f'\nDifficulty used for testing the model: {parameters.ENEMIES_DIFFICULTY}')
+print(f'This model has a score for the competition of {len(gains) / np.sum(1.0 / np.array(gains)):.2f}/200.01\n')
 
 t = Texttable()
 t.add_rows([['Enemy', 'Player life', 'Enemy life']] + results)
