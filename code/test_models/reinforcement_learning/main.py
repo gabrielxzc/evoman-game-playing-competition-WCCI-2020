@@ -22,6 +22,7 @@ else:
 
 import torch
 import numpy as np
+from texttable import Texttable
 
 from test_models.reinforcement_learning.evoman_reinforcement_learning.player_controller import \
     TestReinforcementLearningEvomanPlayerController
@@ -30,14 +31,19 @@ import test_models.reinforcement_learning.parameters as parameters
 
 model = torch.load(os.path.join(parameters.MODEL_PATH, 'pyt_save', 'model.pt'))
 gains = []
+results = []
 
 for enemy in range(1, 9):
     evoman_environment = EvomanEnvironmentWrapper('evoman rl test',
                                                   player_controller=TestReinforcementLearningEvomanPlayerController(),
                                                   enemies=[enemy],
-                                                  level=5,
-                                                  speed="normal")
+                                                  level=5)
     _, player_life, enemy_life, time = evoman_environment.play(pcont=model)
     gains.append(100.01 + player_life - enemy_life)
+    results.append([enemy, player_life, enemy_life])
 
-print(f'This model has a score for the competition of {len(gains) / np.sum(1.0 / np.array(gains)):.2f} out of 200.01')
+print(f'\nThis model has a score for the competition of {len(gains) / np.sum(1.0 / np.array(gains)):.2f}/200.01\n')
+
+t = Texttable()
+t.add_rows([['Enemy', 'Player life', 'Enemy life']] + results)
+print(t.draw())
