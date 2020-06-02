@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 import evoman_wrapper.constants as evoman_constants
 from evoman_wrapper.environment_wrapper import EvomanEnvironmentWrapper
@@ -18,6 +19,8 @@ class EvomanPsoAlgorithm:
         self._evoman_pso_parameters = evoman_pso_parameters
 
     def train(self):
+        start_time = time.time()
+
         pso_parameters = PsoParameters(
             pop_size=self._evoman_pso_parameters.pop_size,
             nr_iterations=self._evoman_pso_parameters.nr_iterations,
@@ -37,8 +40,10 @@ class EvomanPsoAlgorithm:
         pso_algorithm = PsoAlgorithm(pso_parameters)
         pso_solution = pso_algorithm.train()
 
+        time_to_train_in_seconds = time.time() - start_time
+
         return EvomanPsoSolution(pso_solution.particle_state, pso_solution.particle_fitness,
-                                 self._evoman_pso_parameters)
+                                 self._evoman_pso_parameters, time_to_train_in_seconds)
 
     def _generate_particle_state(self):
         model = self._get_model()
@@ -50,7 +55,8 @@ class EvomanPsoAlgorithm:
                                      weights)
 
     def _get_model_hidden_and_output_layers_sizes(self):
-        return self._evoman_pso_parameters.model_hidden_layers_sizes + [evoman_constants.ACTION_SPACE_SIZE]
+        possible_number_of_actions = int(pow(2, evoman_constants.ACTION_SPACE_SIZE))
+        return self._evoman_pso_parameters.model_hidden_layers_sizes + [possible_number_of_actions]
 
     def _generate_particle_speed(self, particle_state):
         return (self._evoman_pso_parameters.max_particle_speed - self._evoman_pso_parameters.min_particle_speed) * \

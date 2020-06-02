@@ -15,6 +15,10 @@ def get_model(input_dim, hidden_and_output_layers_sizes, weights=None):
         if is_first_hidden_layer:
             layer_kwargs["input_dim"] = input_dim
 
+        is_output_layer = hidden_or_output_layer_idx == len(hidden_and_output_layers_sizes) - 1
+        if is_output_layer:
+            layer_kwargs["activation"] = activations.linear
+
         model.add(layers.Dense(hidden_or_output_layer_nr_of_neurons, **layer_kwargs))
 
     if weights is not None:

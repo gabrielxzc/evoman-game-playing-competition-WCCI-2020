@@ -1,3 +1,5 @@
+import torch
+import torch.distributions as distributions
 import numpy as np
 
 from controller import Controller
@@ -13,5 +15,5 @@ class KerasModelPlayerController(Controller):
         return self._get_action_from_prediction(prediction)
 
     def _get_action_from_prediction(self, prediction):
-        get_action_from_prediction_vectorize = np.vectorize(lambda x: 0 if x < 0 else 1)
-        return get_action_from_prediction_vectorize(prediction)
+        action = distributions.Categorical(logits=torch.as_tensor(prediction, dtype=torch.float32)).sample()
+        return [int(bit) for bit in bin(action)[2:].zfill(5)]
