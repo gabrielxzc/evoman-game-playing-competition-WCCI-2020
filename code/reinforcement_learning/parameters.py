@@ -4,7 +4,8 @@ import torch
 # [3, 4, 6, 7]
 # [1, 3, 6, 7] 100
 # [2, 3, 6, 7] 137
-ENEMIES_CHOSEN_FOR_TRAINING = [2, 4, 6, 7]
+# [2, 4, 6, 7] 87.13
+ENEMIES_CHOSEN_FOR_TRAINING = []
 
 MODEL_HIDDEN_LAYERS_SIZES = (64, 64)
 MODEL_ACTIVATION = torch.nn.Tanh
