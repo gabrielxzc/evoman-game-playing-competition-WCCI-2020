@@ -1,19 +1,24 @@
 import torch
-# [1, 2, 6, 7] 130
+
+# [1, 2, 6, 7] 127.54
 # [3, 4, 5, 8]
 # [3, 4, 6, 7]
 # [1, 3, 6, 7] 100
-# [2, 3, 6, 7] 137
+# [2, 3, 6, 7] 137 ! incorrect
 # [2, 4, 6, 7] 87.13
+
+# corrected
+# [2, 3, 6, 7] 95.69
+
 ENEMIES_CHOSEN_FOR_TRAINING = []
 
 MODEL_HIDDEN_LAYERS_SIZES = (64, 64)
-MODEL_ACTIVATION = torch.nn.Tanh
+MODEL_ACTIVATION = torch.nn.Tanhs
 
 STEPS_PER_EPOCH = 10000
 EPOCHS = 2000
 
-STARTING_MODEL_PATH = '../trained_models/reinforcement_learning/1590579471.1575735'
+STARTING_MODEL_PATH = None
 
 NR_PARALLEL_PROCESSES = 3
 
