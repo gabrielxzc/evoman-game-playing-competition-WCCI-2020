@@ -11,7 +11,7 @@ if is_running_from_command_line:
 
 # Parallelization part, had to be done before all the hacks
 
-from spinup.utils.mpi_tools import mpi_fork
+from spinup_utils.mpi_tools import mpi_fork
 import reinforcement_learning.parameters as parameters
 
 mpi_fork(parameters.NR_PARALLEL_PROCESSES)
@@ -29,7 +29,7 @@ else:
 # Start of code without hacks
 
 
-from spinup.algos.pytorch.ppo.ppo import ppo
+from reinforcement_learning.ppo.ppo import ppo
 
 import time
 
@@ -43,4 +43,4 @@ ppo(ac_kwargs={'hidden_sizes': parameters.MODEL_HIDDEN_LAYERS_SIZES, 'activation
     pi_lr=parameters.PI_LR, vf_lr=parameters.VF_LR, train_pi_iters=parameters.TRAIN_PI_ITERATIONS,
     train_v_iters=parameters.TRAIN_V_ITERATIONS, lam=parameters.LAMBDA, target_kl=parameters.TARGET_KL,
     logger_kwargs=logger_kwargs, save_freq=parameters.SAVE_FREQ, starting_actor_critic=parameters.STARTING_MODEL_PATH,
-    is_starting_actor_critic_pso=True)
+    is_starting_actor_critic_pso=parameters.IS_STARTING_MODEL_PSO)
