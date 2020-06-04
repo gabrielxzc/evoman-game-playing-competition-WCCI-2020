@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import torch
+import pickle
 from torch.optim import Adam
 import gym
 import time
@@ -8,6 +9,8 @@ import spinup.algos.pytorch.ppo.core as core
 from spinup.utils.logx import EpochLogger
 from spinup.utils.mpi_pytorch import setup_pytorch_for_mpi, sync_params, mpi_avg_grads
 from spinup.utils.mpi_tools import mpi_fork, mpi_avg, proc_id, mpi_statistics_scalar, num_procs
+import utils.keras
+import evoman_wrapper.constants as evoman_constants
 
 from reinforcement_learning.evoman_reinforcement_learning.environment import ReinforcementLearningEvomanEnvironment
 from reinforcement_learning.evoman_reinforcement_learning.player_controller import \
@@ -91,7 +94,8 @@ class PPOBuffer:
 
 def ppo(actor_critic=core.MLPActorCritic, ac_kwargs=dict(), seed=0, steps_per_epoch=4000, epochs=50,
         enemies=[1, 4, 6, 7], gamma=0.99, clip_ratio=0.2, pi_lr=3e-4, vf_lr=1e-3, train_pi_iters=80,
-        train_v_iters=80, lam=0.97, target_kl=0.01, logger_kwargs=dict(), save_freq=10, starting_actor_critic=None):
+        train_v_iters=80, lam=0.97, target_kl=0.01, logger_kwargs=dict(), save_freq=10, starting_actor_critic=None,
+        is_starting_actor_critic_pso=False):
     """
     Proximal Policy Optimization (by clipping), 
 
@@ -215,7 +219,11 @@ def ppo(actor_critic=core.MLPActorCritic, ac_kwargs=dict(), seed=0, steps_per_ep
     if starting_actor_critic is None:
         ac = actor_critic(observation_space, action_space, **ac_kwargs)
     else:
-        ac = torch.load(os.path.join(starting_actor_critic, "pyt_save", "model.pt"))
+        if is_starting_actor_critic_pso:
+            ac = actor_critic(observation_space, action_space, **ac_kwargs)
+            set_ac_weigts_to_weights_from_pso_trained_model(ac, starting_actor_critic)
+        else:
+            ac = torch.load(os.path.join(starting_actor_critic, "pyt_save", "model.pt"))
 
     # Sync params across processes
     sync_params(ac)
@@ -352,6 +360,18 @@ def ppo(actor_critic=core.MLPActorCritic, ac_kwargs=dict(), seed=0, steps_per_ep
         logger.log_tabular('StopIter', average_only=True)
         logger.log_tabular('Time', time.time() - start_time)
         logger.dump_tabular()
+
+
+def set_ac_weigts_to_weights_from_pso_trained_model(evoman_pso_solution_file_path):
+    with open(evoman_pso_solution_file_path, 'rb') as evoman_pso_solution_file:
+        evoman_pso_solution = pickle.load(evoman_pso_solution_file)
+
+    model_flattened_weights = evoman_pso_solution.model_flattened_weights
+
+    weights = utils.keras.get_model_weights_from_flattened_weights(model_flattened_weights,
+                                                                   [evoman_constants.OBSERVATION_SPACE_SIZE] +
+                                                                   evoman_pso_solution.evoman_pso_parameters.model_hidden_layers_sizes +
+                                                                   [int(pow(2, evoman_constants.ACTION_SPACE_SIZE))])
 
 
 if __name__ == '__main__':
