@@ -18,7 +18,12 @@ MODEL_ACTIVATION = torch.nn.Tanh
 STEPS_PER_EPOCH = 10000
 EPOCHS = 2000
 
-STARTING_MODEL_PATH = '../trained_models/pso_bootstrap/[1, 2, 6, 7]/61.38_1591194194.380356.pickle'
+# trained_models/pso_bootstrap/[1, 2, 6, 7]/47.98_1591201550.222573.pickle 43.2
+# trained_models/pso_bootstrap/[1, 2, 6, 7]/52.13_1591215640.939492.pickle 42.7
+# trained_models/pso_bootstrap/[1, 2, 6, 7]/56.86_1591208496.467009.pickle
+# trained_models/pso_bootstrap/[1, 2, 6, 7]/61.38_1591194194.380356.pickle
+
+STARTING_MODEL_PATH = '../trained_models/pso_bootstrap/[1, 2, 6, 7]/56.86_1591208496.467009.pickle'
 IS_STARTING_MODEL_PSO = True
 
 NR_PARALLEL_PROCESSES = 3
