@@ -1,0 +1,50 @@
+{
+    "ac_kwargs":	{
+        "activation":	"Tanh",
+        "hidden_sizes":	[
+            64,
+            64
+        ]
+    },
+    "actor_critic":	"MLPActorCritic",
+    "clip_ratio":	0.2,
+    "enemies":	[
+        1,
+        2,
+        6,
+        7
+    ],
+    "epochs":	250,
+    "exp_name":	"evoman reinforcement learning",
+    "gamma":	0.99,
+    "is_starting_actor_critic_pso":	false,
+    "lam":	0.97,
+    "logger":	{
+        "<spinup_utils.logx.EpochLogger object at 0x7f347cbf6150>":	{
+            "epoch_dict":	{},
+            "exp_name":	"evoman reinforcement learning",
+            "first_row":	true,
+            "log_current_row":	{},
+            "log_headers":	[],
+            "output_dir":	"../trained_models/reinforcement_learning/1591641901.9027252",
+            "output_file":	{
+                "<_io.TextIOWrapper name='../trained_models/reinforcement_learning/1591641901.9027252/progress.txt' mode='w' encoding='UTF-8'>":	{
+                    "mode":	"w"
+                }
+            }
+        }
+    },
+    "logger_kwargs":	{
+        "exp_name":	"evoman reinforcement learning",
+        "output_dir":	"../trained_models/reinforcement_learning/1591641901.9027252"
+    },
+    "pi_lr":	0.0003,
+    "save_freq":	10,
+    "seed":	1591641901,
+    "starting_actor_critic":	"../trained_models/reinforcement_learning/1591635832.204705",
+    "steps_per_epoch":	10000,
+    "target_kl":	0.01,
+    "train_pi_iters":	80,
+    "train_v_iters":	80,
+    "vf_lr":	0.001
+}
