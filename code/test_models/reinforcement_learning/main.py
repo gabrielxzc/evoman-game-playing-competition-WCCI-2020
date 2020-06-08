@@ -23,11 +23,22 @@ else:
 import torch
 import numpy as np
 from texttable import Texttable
+import csv
 
 from test_models.reinforcement_learning.evoman_reinforcement_learning.player_controller import \
     TestReinforcementLearningEvomanPlayerController
 from evoman_wrapper.environment_wrapper import EvomanEnvironmentWrapper
 import test_models.reinforcement_learning.parameters as parameters
+
+
+def save_csv_results(results):
+    with open(f'../reports/{parameters.model_name}.csv', 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        csvwriter.writerow(
+            ['enemy', 'gain', 'avg_player_life', 'avg_enemy_life', 'avg_duration', 'min_player_life', 'max_player_life',
+             'min_enemy_life', 'max_enemy_life', 'min_duration', 'max_duration'])
+        csvwriter.writerows(results)
+
 
 model = torch.load(os.path.join(parameters.MODEL_PATH, 'pyt_save', 'model.pt'))
 
@@ -66,6 +77,8 @@ for enemy in parameters.ENEMIES_CHOSEN_FOR_TESTING:
     results.append(
         [enemy, gains[-1], average_player_life, average_enemy_life, average_time, min_player_life, max_player_life,
          min_enemy_life, max_enemy_life, min_time, max_time])
+
+save_csv_results(results)
 
 harmonic_mean_of_gains = len(gains) / np.sum(1.0 / np.array(gains))
 print(f'This model has a score for the competition of {harmonic_mean_of_gains:.2f}/200.01\n')
