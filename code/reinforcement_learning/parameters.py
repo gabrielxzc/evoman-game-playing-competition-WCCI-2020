@@ -28,7 +28,8 @@ EPOCHS = 250  # 528  # 2000
 # STARTING_MODEL_PATH = '../trained_models/reinforcement_learning/1591261004.787129'
 
 model_name = sorted(os.listdir('trained_models/reinforcement_learning'))[-1]
-STARTING_MODEL_PATH = f'../trained_models/reinforcement_learning/{model_name}'
+# STARTING_MODEL_PATH = f'../trained_models/reinforcement_learning/{model_name}'
+STARTING_MODEL_PATH = None
 IS_STARTING_MODEL_PSO = False
 
 NR_PARALLEL_PROCESSES = 3
