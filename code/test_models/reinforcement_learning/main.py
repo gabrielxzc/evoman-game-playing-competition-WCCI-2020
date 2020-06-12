@@ -3,6 +3,8 @@
 import sys
 import os
 
+
+
 is_running_from_command_line = len(sys.path) <= 7
 if is_running_from_command_line:
     script_path_tokens = sys.path[0].split(os.sep)
@@ -19,6 +21,7 @@ else:
     os.chdir('../../../evoman_framework')
 
 # Start of code without hacks
+
 
 import torch
 import numpy as np

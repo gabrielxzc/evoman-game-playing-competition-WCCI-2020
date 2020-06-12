@@ -17,7 +17,7 @@ MODEL_HIDDEN_LAYERS_SIZES = (64, 64)
 MODEL_ACTIVATION = torch.nn.Tanh
 
 STEPS_PER_EPOCH = 10000
-EPOCHS = 250  # 528  # 2000
+EPOCHS = 250  # 2000
 
 # trained_models/pso_bootstrap/[1, 2, 6, 7]/47.98_1591201550.222573.pickle 43.2
 # trained_models/pso_bootstrap/[1, 2, 6, 7]/52.13_1591215640.939492.pickle 42.7
@@ -28,8 +28,7 @@ EPOCHS = 250  # 528  # 2000
 # STARTING_MODEL_PATH = '../trained_models/reinforcement_learning/1591261004.787129'
 
 model_name = sorted(os.listdir('trained_models/reinforcement_learning'))[-1]
-# STARTING_MODEL_PATH = f'../trained_models/reinforcement_learning/{model_name}'
-STARTING_MODEL_PATH = None
+STARTING_MODEL_PATH = f'../trained_models/reinforcement_learning/{model_name}'
 IS_STARTING_MODEL_PSO = False
 
 NR_PARALLEL_PROCESSES = 3

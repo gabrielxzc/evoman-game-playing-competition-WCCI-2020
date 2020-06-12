@@ -1,6 +1,6 @@
 source ./venv/bin/activate
 
-NR_OF_EXPERIMENTS_TO_RUN=1
+NR_OF_EXPERIMENTS_TO_RUN=11
 
 printf "Please run this script from the root folder of this repository\n"
 printf "e.g. ~/evoman-game-playing-competition$ scripts/reinforcement_learning.sh"
