@@ -89,7 +89,7 @@ if mode == "test":
 	winners_slain["time"] = 3000 - winners_slain["time"]
 	winners_gain["time"] = 3000 - winners_gain["time"]
 	pd.concat([winners_slain, winners_gain], axis=1).to_csv("winners.csv")
-	# Prepare data for radar chart and make plots of winners and whole class
+	# Prepare data for radar chart and make data_for_plots of winners and whole class
 	# adapted from: https://python-graph-gallery.com/391-radar-chart-with-several-individuals/
 	for winner in [winners_slain["group"], winners_gain["group"], ["whole_class"]]:                         # !!!! [:3]
 		for group in winner:
