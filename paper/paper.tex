@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{hyperref}
 
 \selectcolormodel{cmyk}
 
@@ -75,7 +76,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{images/Evoman3.png}
-        \caption{Sensors available for the player.}
+        \caption{Sensors available for the player\cite{evoman}.}
         \label{fig:sensors}
     \end{figure}
     The actions which the agent may take are:
@@ -95,10 +96,10 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     as they are defeated.
     The additional difficulty of EvoMan comes from the fact that the player has to defeat all
     the opponents using only the starting weapon.
-    The framework is freely available\footnote{\url{https://github.com/karinemiras/evoman\_framework}}
+    The framework is freely available\footnote{\url{https://github.com/karinemiras/evoman_framework}}
     and it is currently compatible with Python 3.6 and 3.7.
     There is also an extensive documentation
-    available\footnote{\url{https://github.com/karinemiras/evoman\_framework/blob/master/evoman1.0-doc.pdf}}.
+    available\footnote{\url{https://github.com/karinemiras/evoman_framework/blob/master/evoman1.0-doc.pdf}}.
 
     \subsection{Problem}\label{subsec:problem}
     Beating an opponent is relatively easy when using specialized models against a specific enemy.
@@ -487,23 +488,22 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     The tests were run on an i7 4750HQ processor.
     The training was done on 3 threads.
     All computations were done on the CPU\@.
-    (todo: detalii despre timpul de rulare (din fisierele model\_name.csv))
-
-
+    The median game time during training is 28 seconds.
+    (todo: include median nr of epochs at testing)
 
     \begin{thebibliography}{00}
         \bibitem{evoman} Fabricio Olivetti de Franca, Denis Fantinato, Karine Miras, A.E. Eiben and Patricia A. Vargas.
         "EvoMan: Game-playing Competition" arXiv:1912.10445
         \bibitem{karinemiras} de Araújo, Karine da Silva Miras, and Fabrício Olivetti de França.
         "An electronic-game framework for evaluating coevolutionary algorithms." arXiv:1604.00644 (2016).
-        \bibitem{neuro} Floreano, D., Dürr, P. & Mattiussi, C. Neuroevolution: from architectures to learning. Evol. Intel. 1, 47–62 (2008). https://doi.org/10.1007/s12065-007-0002-4
+        \bibitem{neuro} Floreano, D., Dürr, P. & Mattiussi, C. Neuroevolution: from architectures to learning. Evol. Intel. 1, 47–62 (2008). \url{https://doi.org/10.1007/s12065-007-0002-4}
         \bibitem{capcom} M. MEGA, "Produced by capcom, distributed by capcom, 1987," System: NES.
         \bibitem{q_learning} Watkins, C.J.C.H., Dayan, P. Q-learning. Machine Learning 8, 279–292 (1992)
         \bibitem{genetic_algorithm} Holland J.H., Genetic Algorithms and Adaptation. Adaptive Control of Ill-Defined Systems, 1984, Volume 16 ISBN 978-1-4684-8943-9
         \bibitem{pso} Kennedy, J.; Eberhart, R. (1995). "Particle Swarm Optimization". Proceedings of IEEE International Conference on Neural Networks. IV. pp. 1942–1948.
-        \bibitem{neat} Kenneth O. Stanly; Rist Miikkulainen (2002). "Evolving Neural Networks through Augmenting Topologies". Evolutionary Computation, Volume 10, Issue 2, Summer 2002, p.99-127, https://doi.org/10.1162/106365602320169811
+        \bibitem{neat} Kenneth O. Stanly; Rist Miikkulainen (2002). "Evolving Neural Networks through Augmenting Topologies". Evolutionary Computation, Volume 10, Issue 2, Summer 2002, p.99-127, \url{https://doi.org/10.1162/106365602320169811}
         \bibitem{ppo} John Schulman, Filip Wolski, Prafulla Dhariwal, Alex Radford, Oleg Klimov (2017) "Proximal Policy Optimization Algorithms", arXiv:1707.06347v2
-        \bibitem{evoman_blog} Karine Miras, Evoman, https://karinemirasblog.wordpress.com/portfolio/evoman/
+        \bibitem{evoman_blog} Karine Miras, Evoman, \url{https://karinemirasblog.wordpress.com/portfolio/evoman/}
     \end{thebibliography}
 
 \end{document}
