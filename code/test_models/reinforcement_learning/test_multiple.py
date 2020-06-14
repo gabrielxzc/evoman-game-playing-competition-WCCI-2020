@@ -72,7 +72,7 @@ def test_model(model_name, ENEMIES_CHOSEN_FOR_TESTING=range(1, 9), NR_EXPERIMENT
 
             average_player_life += player_life
             average_enemy_life += enemy_life
-            average_time += average_time
+            average_time += time
 
         average_player_life /= NR_EXPERIMENTS_FOR_EACH_ENEMY
         average_enemy_life /= NR_EXPERIMENTS_FOR_EACH_ENEMY

@@ -70,7 +70,7 @@ for enemy in parameters.ENEMIES_CHOSEN_FOR_TESTING:
 
         average_player_life += player_life
         average_enemy_life += enemy_life
-        average_time += average_time
+        average_time += time
 
     average_player_life /= parameters.NR_EXPERIMENTS_FOR_EACH_ENEMY
     average_enemy_life /= parameters.NR_EXPERIMENTS_FOR_EACH_ENEMY
