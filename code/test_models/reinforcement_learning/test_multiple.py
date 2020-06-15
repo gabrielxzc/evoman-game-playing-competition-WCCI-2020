@@ -102,4 +102,4 @@ def test_models(models):
 
 
 if __name__ == '__main__':
-    test_models(sorted(os.listdir('../trained_models/reinforcement_learning')))
+    test_models([])

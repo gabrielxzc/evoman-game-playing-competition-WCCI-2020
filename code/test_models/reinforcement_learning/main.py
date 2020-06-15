@@ -3,8 +3,6 @@
 import sys
 import os
 
-
-
 is_running_from_command_line = len(sys.path) <= 7
 if is_running_from_command_line:
     script_path_tokens = sys.path[0].split(os.sep)
@@ -39,7 +37,7 @@ def save_csv_results(results):
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         csvwriter.writerow(
             ['enemy', 'gain', 'avg_player_life', 'avg_enemy_life', 'avg_duration', 'min_player_life', 'max_player_life',
-             'min_enemy_life', 'max_enemy_life', 'min_duration', 'max_duration'])
+             'min_enemy_life', 'max_enemy_life', 'min_duration', 'max_duration', 'percentage_games_lost'])
         csvwriter.writerows(results)
 
 
@@ -52,12 +50,15 @@ for enemy in parameters.ENEMIES_CHOSEN_FOR_TESTING:
     min_player_life, max_player_life, average_player_life = 100, 0, 0
     min_enemy_life, max_enemy_life, average_enemy_life = 100, 0, 0
     min_time, max_time, average_time = 100000000, 0, 0
+    number_of_games_lost = 0
 
     for experiment in range(parameters.NR_EXPERIMENTS_FOR_EACH_ENEMY):
         evoman_environment = EvomanEnvironmentWrapper('evoman rl test',
                                                       player_controller=TestReinforcementLearningEvomanPlayerController(),
                                                       enemies=[enemy])
         _, player_life, enemy_life, time = evoman_environment.play(pcont=model)
+
+        number_of_games_lost += 1 if player_life == 0 else 0
 
         min_player_life = min(min_player_life, player_life)
         max_player_life = max(max_player_life, player_life)
@@ -75,23 +76,24 @@ for enemy in parameters.ENEMIES_CHOSEN_FOR_TESTING:
     average_player_life /= parameters.NR_EXPERIMENTS_FOR_EACH_ENEMY
     average_enemy_life /= parameters.NR_EXPERIMENTS_FOR_EACH_ENEMY
     average_time /= parameters.NR_EXPERIMENTS_FOR_EACH_ENEMY
+    percentage_of_games_lost = 100 * number_of_games_lost / parameters.NR_EXPERIMENTS_FOR_EACH_ENEMY
 
     gains.append(100.01 + average_player_life - average_enemy_life)
     results.append(
         [enemy, gains[-1], average_player_life, average_enemy_life, average_time, min_player_life, max_player_life,
-         min_enemy_life, max_enemy_life, min_time, max_time])
+         min_enemy_life, max_enemy_life, min_time, max_time, percentage_of_games_lost])
 
 save_csv_results(results)
 
 harmonic_mean_of_gains = len(gains) / np.sum(1.0 / np.array(gains))
 print(f'This model has a score for the competition of {harmonic_mean_of_gains:.2f}/200.01\n')
 
-results.append(['Harmonic mean', f'{harmonic_mean_of_gains:.2f}', '-', '-', '-', '-', '-', '-', '-', '-', '-'])
+results.append(['Harmonic mean', f'{harmonic_mean_of_gains:.2f}', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'])
 
 t = Texttable()
 t.set_max_width(0)
 
 t.add_rows([['Enemy', 'Gain', 'Avg\nplayer\nlife', 'Avg\nenemy\nlife', 'Avg\nduration',
              'Min\nplayer\nlife', 'Max\nplayer\nlife', 'Min\nenemy\nlife', 'Max\nenemy\nlife', 'Min\nduration',
-             'Max\nduration']] + results)
+             'Max\nduration', 'Percentage\ngames\nlost']] + results)
 print(t.draw())
