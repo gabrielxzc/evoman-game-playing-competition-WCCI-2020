@@ -11,7 +11,6 @@
 \selectcolormodel{cmyk}
 
 \usepackage{tikz, pgfplots}
-\pgfplotsset{compat=1.17}
 \usetikzlibrary{calc}
 \usetikzlibrary{pgfplots.groupplots}
 \usetikzlibrary{plotmarks}
@@ -92,14 +91,16 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     Everytime one of them gets hit, their life deplenishes.
     Whoever's life reaches 0 loses the game.
 
-    In the original game the player would have to beat $8$ opponents and acquire their weapons
+    In the original Capcom game the player would have to beat $8$ opponents and acquire their weapons
     as they are defeated.
     The additional difficulty of EvoMan comes from the fact that the player has to defeat all
     the opponents using only the starting weapon.
+    Each opponent can be fought on a specified difficulty level. The difficulty level is an integer greater or equal than $1$ which is translated into a factor for the damage taken and damage given by the  player, the higher the difficulty level the lower the damage given and the higher the damage taken.
     The framework is freely available\footnote{\url{https://github.com/karinemiras/evoman_framework}}
     and it is currently compatible with Python 3.6 and 3.7.
     There is also an extensive documentation
     available\footnote{\url{https://github.com/karinemiras/evoman_framework/blob/master/evoman1.0-doc.pdf}}.
+ 
 
     \subsection{Problem}\label{subsec:problem}
     Beating an opponent is relatively easy when using specialized models against a specific enemy.
@@ -116,16 +117,18 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     We are to train an agent against four enemies and then test its performance against all eight.
     The final score metric of an agent is the harmonic mean of the gains against all enemies.
     The combination of four enemies we are to train the agent is not fixed.
+    The difficulty level for solving this problem is $2$ for all enemies in training and testing, but we did some exploratory work with greater level of difficulties outside training and testing for obtaining the final solution for the problem.
+    
+    The specifications above, like the number of enemies chosen for training or the difficulty level, come directly from a competition organized by the creators of the framework\cite{evoman_competition}. 
 
 
     \section{Approach}\label{sec:approach}
     Our intention was to develop a cascade ensemble method where the resulting model of an algorithm
-    which has a high exploratory bias is the starting point of an algorithm with high exploitative bias.
-    The exploratory algorithms we have considered are Q-Learning\cite{q_learning},
-    genetic algorithms\cite{genetic_algorithm} and particle swarm optimization\cite{pso}.
+    which can achieve a decent gain fast or has a high exploratory bias is the starting point of an algorithm with high exploitative bias.
+    The algorithm we expected to obtain a decent gain fast is a classic Q-learning\cite{q_learning} algorithm. The exploratory algorithms we have considered are genetic algorithms\cite{genetic_algorithm} and particle swarm optimization\cite{pso}.
     The exploitative algorithm we used was Proximal Policy Optimization\cite{ppo}.
 
-    To find the best exploratory algorithm we have made the following changes:
+    To find the best bootstraping algorithm we have made the following changes, which had no impact in the training and testing for the final solution to the problem:
     \begin{itemize}
         \item we have increased the difficulty from the default 2 to 5.
         \item the evaluation is made only on the second opponent due to the varied environment.
@@ -142,7 +145,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     used in cascade with proximal policy optimization without the changes mentioned in this section.
 
     \subsection{Q-Learning}\label{subsec:q-learning}
-    The first algorithm is a classic Q-learning\cite{q_learning} algorithm with neural networks.
+    The algorithm we expected to obtain a decent gain fast is a classic Q-learning\cite{q_learning} algorithm with neural networks.
 
     We used a neural network to predict the reward function for each possible move
     (left, right, shoot, jump, release of jump) from a given state.
@@ -156,7 +159,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     using as input the game sensors and as output the true reward function.
     A game ends when either the agent or the enemy lose all life.
     We have trained the agent on 5000 games.
-    The average number of frames per game for the best model is (todo: count in game steps).
+    The average number of frames per game for the best model is 287.
 
     \subsection{Evolving Neural Network Weights with Genetic Algorithms}\label{subsec:evolving-neural-network-weights-with-genetic-algorithms}
     We used genetic algorithms to evolve the weights of neural networks with fixed structures.
@@ -216,14 +219,14 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \item number of iterations: 200
         \item cognitive weight: \{0.4, 0.8, 1.5\}
         \item social weight: \{0.8, 0.4, 3\}
-        \item inertia weight: \{constant 1, uniformly decreasing from 1 to 0.3 (decreasing 0.0035 every iteration)\}
+        \item inertia weight: \{constant 1, uniformly decreasing from 1 to 0.3\}
     \end{itemize}
 
     The same separation between an sparse and an iterative search was made in the case
     of particle swarm optimization, as in the case of the genetic algorithms.
 
     We also tried to search with pso using an uniformly decreasing inertia weight with respect
-    to the percent of the iterations passed, having values from 1 to 0.3.
+    to the percent of the iterations passed, having values from 1 to 0.3. The inertia weight controls the level of exploration versus exploitation, higher values in the beginning of the algorithm lead to better exploration while lower values towards the end of the algorithm lead to better exploitation.
     This was tried to make the PSO focus even more on exploitation, rather than exploration.
 
     \subsection{Proximal Policy Optimization}\label{subsec:proximal-policy-optimization}
@@ -354,25 +357,25 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
     \subsection{Best Combination of Opponents for Training}\label{subsec:best-combination-of-opponents-for-training}
     We searched for the opponents that lead to the best results.
-    The first combination of train opponents we considered was \{1, 2, 6, 7\} because (todo: explain).
+    The first combination of train opponents we considered was \{1, 2, 6, 7\} which was chosen empirically after manually playing against every opponent and chosing the ones which behaved in such a way that covered the most general concepts our agents could learn in our opinion.
     We observed its final gain as 125.37.
     We realized a set of exploratory experiments where we would search for other combinations of train opponents,
     but starting with the resulting model of PPO trained for 1000 epochs on the combination of opponents \{1, 2, 6, 7\}.
     If by starting with a pre-trained model another combination of train enemies does not lead to better results,
     then we can believe that the respective combination does not lead to better results than \{1, 2, 6, 7\}.
     \begin{table}[htbp]
-        \caption{Various train opponents for pre-trained PPO (2000 epochs)}
+        \caption{Results for various opponents when starting with a pre-trained PPO model on enemies \{1, 2, 6, 7\}}
         \begin{center}
             \begin{tabular}{|c|c|}
                 \hline
                 \textbf{Train opponents}&{\textbf{gain (harmonic mean)}} \\
                 \cline{2-4}
                 \hline
-                \{3, 4, 5, 8\} & 44.16 \\
-                \{3, 4, 6, 7\} & 75.3 \\
-                \{1, 3, 6, 7\} & 110.19 \\
-                \{2, 3, 6, 7\} & 136.1 \\
-                \{2, 4, 6, 7\} & 85.22 \\
+                \{1, 2, 6, 7\} \cup \{3, 4, 5, 8\} & 44.16 \\
+                \{1, 2, 6, 7\} \cup \{3, 4, 6, 7\} & 75.3 \\
+                \{1, 2, 6, 7\} \cup \{1, 3, 6, 7\} & 110.19 \\
+                \{1, 2, 6, 7\} \cup \{2, 3, 6, 7\} & 136.1 \\
+                \{1, 2, 6, 7\} \cup \{2, 4, 6, 7\} & 85.22 \\
                 \hline
             \end{tabular}
             \label{table:variations_of_opponents}
@@ -396,9 +399,10 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \caption{Gain comparison between PPO with random initialization and with PSO cascading.}
         \label{fig:random_vs_pso_initialization}
     \end{figure}
-
-    \subsection{PPO 2000 epochs vs PPO 3000 epochs}\label{subsec:ppo-2000-epochs-vs-ppo-3000-epochs}
-    The final gain is greater after 2000 epochs than after 3000 epochs (Fig.~\ref{fig:ppo_2000_vs_3000_epochs}).
+	Our explanation for getting worse results when using the technique mentioned above is that the function landscape is very big and PSO doesn't explore enough. Another possible explanation would be that the landscape is tricky when it comes to searching for generalist versus specialized solutions. We could try solving this problem by giving more exploratory power to PSO, but we did not experiment with this due to the lack of time. 
+    \subsection{PPO on the best configuration}\label{subsec:ppo-on-the-best-configuration}
+    Considering the results above, we decided that PPO with random initialization and enemies \{1, 2, 6, 7\} chosen for training would be the best configuration. We ran 3000 epochs of this configuration, saving all the models along the way after every 250 epochs.
+    After taking a look at the testing results, we noticed that the final gain is greater after 2000 epochs than after 3000 epochs (Fig.~\ref{fig:ppo_2000_vs_3000_epochs}).
     This means that there is overfitting during the training.
     We can conclude that by stopping the PPO algorithm after 2000 epochs instead of 3000 epochs
     we can end up with more generalized agents that perform better on average against all opponents.
@@ -412,7 +416,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=0.5\textwidth]{images/ppo_gain_evolution_3_runs.eps}
-        \caption{Gain Evolution for PPO in 3 runs.}
+        \caption{Gain Evolution for PPO in 3 runs, each model was ran 30 times on each opponent for calculating the gains}
         \label{fig:ppo_gain_evolution_3_runs}
     \end{figure}
 
@@ -504,6 +508,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \bibitem{neat} Kenneth O. Stanly; Rist Miikkulainen (2002). "Evolving Neural Networks through Augmenting Topologies". Evolutionary Computation, Volume 10, Issue 2, Summer 2002, p.99-127, \url{https://doi.org/10.1162/106365602320169811}
         \bibitem{ppo} John Schulman, Filip Wolski, Prafulla Dhariwal, Alex Radford, Oleg Klimov (2017) "Proximal Policy Optimization Algorithms", arXiv:1707.06347v2
         \bibitem{evoman_blog} Karine Miras, Evoman, \url{https://karinemirasblog.wordpress.com/portfolio/evoman/}
+        \bibitem{evoman_competition} Evoman: Game-playing Competition for WCCI 2020, \url{http://pesquisa.ufabc.edu.br/hal/Evoman.html}
     \end{thebibliography}
 
 \end{document}
