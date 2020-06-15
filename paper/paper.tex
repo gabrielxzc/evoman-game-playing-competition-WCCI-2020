@@ -219,7 +219,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \item number of iterations: 200
         \item cognitive weight: \{0.4, 0.8, 1.5\}
         \item social weight: \{0.8, 0.4, 3\}
-        \item inertia weight: \{constant 1, uniformly decreasing from 1 to 0.3\}
+        \item inertia weight: \{constant 1, decreasing from 1 by 0.0035 every epoch\}
     \end{itemize}
 
     The same separation between an sparse and an iterative search was made in the case
