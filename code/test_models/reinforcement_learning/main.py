@@ -37,7 +37,7 @@ def save_csv_results(results):
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         csvwriter.writerow(
             ['enemy', 'gain', 'avg_player_life', 'avg_enemy_life', 'avg_duration', 'min_player_life', 'max_player_life',
-             'min_enemy_life', 'max_enemy_life', 'min_duration', 'max_duration'])
+             'min_enemy_life', 'max_enemy_life', 'min_duration', 'max_duration', 'percentage_games_lost'])
         csvwriter.writerows(results)
 
 
