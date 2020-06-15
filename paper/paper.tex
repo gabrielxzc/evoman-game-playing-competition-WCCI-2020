@@ -46,7 +46,17 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     \maketitle
 
     \begin{abstract}
-        Abstract is last.
+        This paper describes a comparison between algorithms for evolving agents for the game Evoman.
+        We have tried a cascade ensemble method, starting with an algorithm that is either fast either has
+        an explorative bias and refining its solution with an exploitative algorithm.
+        The algorithms we have tested for the first stage are Q-learning, genetic algorithms and particle swarm optimization.
+        All of these algorithms are searching for the weights of a neural network of a fixed structure.
+        Both the genetic algorithms and the particle swarm optimization algorithms were tested with a sparse and
+        an iterative approach.
+        The best explorative algorithm was the sparse particle swarm optimization.
+        The exploitative algorithm we tested is proximal policy optimization.
+        Using PPO with random initialization lead to better results than an ensemble method of PSO cascaded with PPO\@.
+        We also detected overfitting of the agent trained with PPO\@.
     \end{abstract}
 
     \begin{IEEEkeywords}
@@ -56,8 +66,16 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 
     \section{Introduction}\label{sec:introduction}
-    Introduction is also last.
-
+    This paper presents our solution for the "Evoman: Game-playing Competition for WCCI 2020"\cite{evoman_competition}.
+    We are attempting to train an agent playing the 2D shooting game Evoman\cite{evoman}.
+    We have tried an ensemble cascade method with two stages.
+    For the first stage we tested algorithms that either found acceptable solutions fast either had a high
+    explorative bias.
+    The algorithms we considered for this stage are Q-Learning\cite{q_learning}, genetic algorithms\cite{genetic_algorithm}
+    and particle swarm optimization\cite{pso}.
+    Both the GA and the PSO train the weights of a neural network of a fixed structure.
+    Both the GA and the PSO were tested with a sparse approach and an iterative approach.
+    For the exploitative stage we used Proximal Policy Optimization\cite{ppo}.
 
     \section{Problem Description}\label{sec:problem-description}
 
@@ -95,7 +113,9 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     as they are defeated.
     The additional difficulty of EvoMan comes from the fact that the player has to defeat all
     the opponents using only the starting weapon.
-    Each opponent can be fought on a specified difficulty level. The difficulty level is an integer greater or equal than $1$ which is translated into a factor for the damage taken and damage given by the player, the higher the difficulty level the lower the damage given and the higher the damage taken.
+    Each opponent can be fought on a specified difficulty level.
+    The difficulty level is an integer greater or equal than $1$ which is translated into a factor for the damage
+    taken and damage given by the player, the higher the difficulty level the lower the damage given and the higher the damage taken.
     The framework is freely available\footnote{\url{https://github.com/karinemiras/evoman_framework}}
     and it is currently compatible with Python 3.6 and 3.7.
     There is also an extensive documentation
@@ -116,9 +136,12 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     We are to train an agent against four enemies and then test its performance against all eight.
     The final score metric of an agent is the harmonic mean of the gains against all enemies.
     The combination of four enemies we are to train the agent is not fixed.
-    The difficulty level for solving this problem is $2$ for all enemies in training and testing, but we did some exploratory work with greater level of difficulties outside training and testing for obtaining the final solution for the problem.
+    The difficulty level for solving this problem is $2$ for all enemies in training and testing,
+    but we did some exploratory work with greater level of difficulties outside training and
+    testing for obtaining the final solution for the problem.
 
-    The specifications above, like the number of enemies chosen for training or the difficulty level, come directly from a competition organized by the creators of the framework\cite{evoman_competition}.
+    The specifications above, like the number of enemies chosen for training or the difficulty level,
+    come directly from a competition organized by the creators of the framework\cite{evoman_competition}.
 
 
     \section{Approach}\label{sec:approach}
@@ -390,6 +413,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     \subsection{Random Initialization PPO vs PSO Cascading PPO}\label{subsec:random-initialization-ppo-vs-pso-cascading-ppo}
     The best PSO configuration was used in cascade before the PPO in 4 runs.
     PPO with random initialization was ran 3 times.
+    The small number of runs is due to the long run time of the training.
     The worst result of the PPO with random initialization is higher than the best result
     of PSO cascaded with PPO\@ (Fig.~\ref{fig:random_vs_pso_initialization}).
     \begin{figure}[htbp]
@@ -402,7 +426,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
     \subsection{PPO on the best configuration}\label{subsec:ppo-on-the-best-configuration}
     Considering the results above, we decided that PPO with random initialization and enemies \{1, 2, 6, 7\} chosen for training would be the best configuration. We ran 3000 epochs of this configuration, saving all the models along the way after every 250 epochs.
-    After taking a look at the testing results, we noticed that the final gain is greater after 2000 epochs than after 3000 epochs (Fig.~\ref{fig:ppo_2000_vs_3000_epochs}).
+    After looking at the testing results, we noticed that the final gain is greater after 2000 epochs than after 3000 epochs (Fig.~\ref{fig:ppo_2000_vs_3000_epochs}).
     This means that there is overfitting during the training.
     We can conclude that by stopping the PPO algorithm after 2000 epochs instead of 3000 epochs
     we can end up with more generalized agents that perform better on average against all opponents.
@@ -420,74 +444,27 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \label{fig:ppo_gain_evolution_3_runs}
     \end{figure}
 
-    \subsection{Best Tested Agent}\label{subsec:best-tested-agent}
-    The highest gain for a tested agent is 137.18.
-    It was obtained after 1750 epochs of one of the PPO runs with random initialization.
-    Only against opponents 3 and 4 this agent sometimes loses.
-    \begin{table}[htbp]
-        \caption{Best Agent Against All Opponents}
-        \begin{center}
-            \begin{tabular}{|c|c|}
-                \hline
-                \textbf{Opponent}&{\textbf{Average gain (30 games)}} \\
-                \hline
-                1 & 199.61 \\
-                2 & 189.143 \\
-                3 & 85.01 \\
-                4 & 80.17 \\
-                5 & 158.83 \\
-                6 & 194.37 \\
-                7 & 191.17 \\
-                8 & 140.61 \\
-                \hline
-            \end{tabular}
-        \end{center}
-    \end{table}
+    \subsection{Best Train Agent vs Best Tested Agent}\label{subsec:best-tested-agent}
+    The best train gain was obtained in the first run of the PPO with random initialization.
+    The train gain was computed as the harmonic mean of the averages per opponent of the 30 games played against
+    the enemies \{1, 2, 6, 7\}.
+    The highest train gain is 198.4.
+    When computed against all opponents, this agent has an overall gain of 117.22.
+    Out of the three PPO with random initialization runs, the highest final gain is 127.01.
+    After the experiments were concluded we also looked at the overall gains of the agents before 3000 epochs (Fig.~\ref{fig:ppo_gain_evolution_3_runs}).
+    For the runs 2 and 3 the snapshots of the models were saved every 250 epochs.
+    In the first run these periodic snapshots start after 2000 epochs.
+    When looking at the results of the intermediary agents we observed that there are some high peaks in test gain.
+    The highest test gain was observed during the third run after 1750 epochs and it has a value of 137.18.
+
 
     \subsection{Comparison with the Upper Bound}\label{subsec:comparison-with-the-upper-bound}
     With the PPO algorithm trained on the opponents \{1, 2, 6, 7\} we have
     beat the best specialized models from the original paper which were given as upper bounds\cite{evoman}.
-    \begin{table}[htbp]
-        \caption{Specialized NEAT vs Generalized PPO on train opponents}
-        \begin{center}
-            \begin{tabular}{|c|c|c|}
-                \hline
-                \textbf{Opponent}&{\textbf{Specialized NEAT}}&{\textbf{Generalized PPO}} \\
-                \cline{2-4}
-                \hline
-                1 & 190.01 & 199.81 \\
-                2 & 194.01 & 190.34 \\
-                6 & 173.01 & 195.85 \\
-                7 & 177.01 & 193.27 \\
-                \hline
-                \multicolumn{3}{l}{The generalized PPO was trained on the opponents \{1, 2, 6, 7\}}
-            \end{tabular}
-        \end{center}
-    \end{table}
+
 
     \begin{table}[htbp]
-        \caption{Specialized NEAT vs Generalized PPO}
-        \begin{center}
-            \begin{tabular}{|c|c|c|c|c|c|}
-                \hline
-                \textbf{Opponent}&{\textbf{NEAT}}&{\textbf{PPO Run 1}}&{\textbf{PPO Run 2}}&{\textbf{PPO Run 3}}&{\textbf{PPO Best}} \\
-                \cline{2-4}
-                \hline
-                1 & 190.01 & 198.41 & 199.07 & 199.81 & 199.61 \\
-                2 & 194.01 & 199.74 & 199.27 & 190.34 & 189.14 \\
-                3 & 180.01 & 58.94 & 46.67 & 70.27 & 85.01 \\
-                4 & 194.01 & 58.34 & 66.5 & 64.11 & 80.17 \\
-                5 & 194.01 & 172.61 & 165.65 & 174.61 & 158.83 \\
-                6 & 173.01 & 195.73 & 196.95 & 195.85 & 194.37 \\
-                7 & 177.01 & 199.79 & 195.05 & 193.27 & 191.17 \\
-                8 & 186.01 & 122.17 & 145.49 & 141.89 & 140.61 \\
-                \hline
-            \end{tabular}
-        \end{center}
-    \end{table}
-
-    \begin{table}[htbp]
-        \caption{Results}
+        \caption{Specialized NEAT vs Generalized PPO (Gain)}
         \begin{center}
             \begin{tabular}{|c|c|c|c|c|c|}
                 \hline
@@ -496,33 +473,53 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
                 & \textbf{\textit{Run 1}}& \textbf{\textit{Run 2}}& \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} & NEAT \\
                 \cline{4-5}
                 & 3000 ep & 3000 ep & 3000 ep & 1750 ep & \\
-                & (best at training) &  &  & (best tested) & \\
+                & (best at training) & & & (best tested) & \\
                 \hline
                 1 & 198.41 & 199.07 & 199.81 & 199.61 & 190.01 \\
-                \hline
                 2 & 199.74 & 199.27 & 190.34 & 189.14 & 194.01 \\
-                \hline
-                3 & 58.94 & 46.67 & 70.27 &  85.01 & 180.01 \\
-                \hline
+                3 & 58.94 & 46.67 & 70.27 & 85.01 & 180.01 \\
                 4 & 58.34 & 66.5 & 64.11 & 80.17 & 194.01 \\
-                \hline
                 5 & 172.61 & 165.65 & 174.61 & 158.83 & 194.01\\
-                \hline
                 6 & 195.73 & 196.95 & 195.85 & 194.37 & 173.01 \\
-                \hline
                 7 & 199.79 & 195.05 & 193.27 & 191.17 & 177.01 \\
-                \hline
                 8 & 122.17 & 145.49 & 141.89 & 140.61 & 186.01 \\
                 \hline
-                \textbf{\{1, 2, 6, 7\}} &  &  &  & & \\
+                \textbf{\{1, 2, 6, 7\}} & & & & & \\
                 \textbf{harmonic mean} & 198.4 & 197.57 & 194.75 & 193.49 & 183.09 \\
                 \hline
-                \textbf{final} &  &  &  & & \\
+                \textbf{final} & & & & & \\
                 \textbf{harmonic mean} & 117.22 & 114.91 & 127.01 & 137.18 & 185.67\\
                 \hline
 
             \end{tabular}
             \label{tab1}
+        \end{center}
+    \end{table}
+
+
+    \begin{table}[htbp]
+        \caption{Specialized NEAT vs Generalized PPO (Percentage of games won)}
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|c|}
+                \hline
+                \textbf{Opponent}&\multicolumn{4}{|c|}{\textbf{PPO}} \\
+                \cline{2-5}
+                & \textbf{\textit{Run 1}}& \textbf{\textit{Run 2}}& \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} \\
+                \cline{4-5}
+                & 3000 ep & 3000 ep & 3000 ep & 1750 ep\\
+                & (best at training) & & & (best tested) \\
+                \hline
+                1 & 100 & 100 & 100 & 100 \\
+                2 & 100 & 100 & 100 & 100 \\
+                3 & 3.33 & 0 & 3.33 & 46.66 \\
+                4 & 0 & 6.66 & 0 & 6.66 \\
+                5 & 100 & 96.66 & 100 & 100 \\
+                6 & 100 & 100 & 100 & 100 \\
+                7 & 100 & 93.33 & 100 & 100 \\
+                8 & 80 & 100 & 96.66 & 90 \\
+                \hline
+
+            \end{tabular}
         \end{center}
     \end{table}
 
@@ -534,7 +531,15 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     The median game time during training is 28 seconds.
     The average number of frames per game is 287.
 
+    \section{Conclusions}\label{sec:conclusions}
+    After observing that the sparse methods were better than the iterative ones,
+    PPO with random initialization is better than PSO cascaded with PPO and
+    PPO with random initialization trained on four opponents leads to better train results
+    than specialized agents trained with NEAT we can conclude that the problem space is in such a
+    way that the methods with a greedy bias are moving away from the global optimum.
+
     \begin{thebibliography}{00}
+        \bibitem{evoman_competition} Evoman: Game-playing Competition for WCCI 2020, \url{http://pesquisa.ufabc.edu.br/hal/Evoman.html}
         \bibitem{evoman} Fabricio Olivetti de Franca, Denis Fantinato, Karine Miras, A.E. Eiben and Patricia A. Vargas.
         "EvoMan: Game-playing Competition" arXiv:1912.10445
         \bibitem{karinemiras} de Araújo, Karine da Silva Miras, and Fabrício Olivetti de França.
@@ -547,7 +552,6 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \bibitem{neat} Kenneth O. Stanly; Rist Miikkulainen (2002). "Evolving Neural Networks through Augmenting Topologies". Evolutionary Computation, Volume 10, Issue 2, Summer 2002, p.99-127, \url{https://doi.org/10.1162/106365602320169811}
         \bibitem{ppo} John Schulman, Filip Wolski, Prafulla Dhariwal, Alex Radford, Oleg Klimov (2017) "Proximal Policy Optimization Algorithms", arXiv:1707.06347v2
         \bibitem{evoman_blog} Karine Miras, Evoman, \url{https://karinemirasblog.wordpress.com/portfolio/evoman/}
-        \bibitem{evoman_competition} Evoman: Game-playing Competition for WCCI 2020, \url{http://pesquisa.ufabc.edu.br/hal/Evoman.html}
     \end{thebibliography}
 
 \end{document}
