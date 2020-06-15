@@ -95,12 +95,11 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     as they are defeated.
     The additional difficulty of EvoMan comes from the fact that the player has to defeat all
     the opponents using only the starting weapon.
-    Each opponent can be fought on a specified difficulty level. The difficulty level is an integer greater or equal than $1$ which is translated into a factor for the damage taken and damage given by the  player, the higher the difficulty level the lower the damage given and the higher the damage taken.
+    Each opponent can be fought on a specified difficulty level. The difficulty level is an integer greater or equal than $1$ which is translated into a factor for the damage taken and damage given by the player, the higher the difficulty level the lower the damage given and the higher the damage taken.
     The framework is freely available\footnote{\url{https://github.com/karinemiras/evoman_framework}}
     and it is currently compatible with Python 3.6 and 3.7.
     There is also an extensive documentation
     available\footnote{\url{https://github.com/karinemiras/evoman_framework/blob/master/evoman1.0-doc.pdf}}.
- 
 
     \subsection{Problem}\label{subsec:problem}
     Beating an opponent is relatively easy when using specialized models against a specific enemy.
@@ -118,8 +117,8 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     The final score metric of an agent is the harmonic mean of the gains against all enemies.
     The combination of four enemies we are to train the agent is not fixed.
     The difficulty level for solving this problem is $2$ for all enemies in training and testing, but we did some exploratory work with greater level of difficulties outside training and testing for obtaining the final solution for the problem.
-    
-    The specifications above, like the number of enemies chosen for training or the difficulty level, come directly from a competition organized by the creators of the framework\cite{evoman_competition}. 
+
+    The specifications above, like the number of enemies chosen for training or the difficulty level, come directly from a competition organized by the creators of the framework\cite{evoman_competition}.
 
 
     \section{Approach}\label{sec:approach}
@@ -399,7 +398,8 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \caption{Gain comparison between PPO with random initialization and with PSO cascading.}
         \label{fig:random_vs_pso_initialization}
     \end{figure}
-	Our explanation for getting worse results when using the technique mentioned above is that the function landscape is very big and PSO doesn't explore enough. Another possible explanation would be that the landscape is tricky when it comes to searching for generalist versus specialized solutions. We could try solving this problem by giving more exploratory power to PSO, but we did not experiment with this due to the lack of time. 
+    Our explanation for getting worse results when using the technique mentioned above is that the function landscape is very big and PSO doesn't explore enough. Another possible explanation would be that the landscape is tricky when it comes to searching for generalist versus specialized solutions. We could try solving this problem by giving more exploratory power to PSO, but we did not experiment with this due to the lack of time.
+
     \subsection{PPO on the best configuration}\label{subsec:ppo-on-the-best-configuration}
     Considering the results above, we decided that PPO with random initialization and enemies \{1, 2, 6, 7\} chosen for training would be the best configuration. We ran 3000 epochs of this configuration, saving all the models along the way after every 250 epochs.
     After taking a look at the testing results, we noticed that the final gain is greater after 2000 epochs than after 3000 epochs (Fig.~\ref{fig:ppo_2000_vs_3000_epochs}).
@@ -447,8 +447,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     \subsection{Comparison with the Upper Bound}\label{subsec:comparison-with-the-upper-bound}
     With the PPO algorithm trained on the opponents \{1, 2, 6, 7\} we have
     beat the best specialized models from the original paper which were given as upper bounds\cite{evoman}.
-    NEAT specialized
-   \begin{table}[htbp]
+    \begin{table}[htbp]
         \caption{Specialized NEAT vs Generalized PPO on train opponents}
         \begin{center}
             \begin{tabular}{|c|c|c|}
@@ -476,8 +475,8 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
                 \hline
                 1 & 190.01 & 198.41 & 199.07 & 199.81 & 199.61 \\
                 2 & 194.01 & 199.74 & 199.27 & 190.34 & 189.14 \\
-                3 & 180.01 & 58.94  &  46.67 &  70.27 & 85.01 \\
-                4 & 194.01 & 58.34  &   66.5 &  64.11 & 80.17 \\
+                3 & 180.01 & 58.94 & 46.67 & 70.27 & 85.01 \\
+                4 & 194.01 & 58.34 & 66.5 & 64.11 & 80.17 \\
                 5 & 194.01 & 172.61 & 165.65 & 174.61 & 158.83 \\
                 6 & 173.01 & 195.73 & 196.95 & 195.85 & 194.37 \\
                 7 & 177.01 & 199.79 & 195.05 & 193.27 & 191.17 \\
@@ -487,13 +486,53 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \end{center}
     \end{table}
 
+    \begin{table}[htbp]
+        \caption{Results}
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|c|c|}
+                \hline
+                \textbf{Opponent}&\multicolumn{4}{|c|}{\textbf{PPO}}&\textbf{Specialized} \\
+                \cline{2-5}
+                & \textbf{\textit{Run 1}}& \textbf{\textit{Run 2}}& \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} & NEAT \\
+                \cline{4-5}
+                & 3000 ep & 3000 ep & 3000 ep & 1750 ep & \\
+                & (best at training) &  &  & (best tested) & \\
+                \hline
+                1 & 198.41 & 199.07 & 199.81 & 199.61 & 190.01 \\
+                \hline
+                2 & 199.74 & 199.27 & 190.34 & 189.14 & 194.01 \\
+                \hline
+                3 & 58.94 & 46.67 & 70.27 &  85.01 & 180.01 \\
+                \hline
+                4 & 58.34 & 66.5 & 64.11 & 80.17 & 194.01 \\
+                \hline
+                5 & 172.61 & 165.65 & 174.61 & 158.83 & 194.01\\
+                \hline
+                6 & 195.73 & 196.95 & 195.85 & 194.37 & 173.01 \\
+                \hline
+                7 & 199.79 & 195.05 & 193.27 & 191.17 & 177.01 \\
+                \hline
+                8 & 122.17 & 145.49 & 141.89 & 140.61 & 186.01 \\
+                \hline
+                \textbf{\{1, 2, 6, 7\}} &  &  &  & & \\
+                \textbf{harmonic mean} & 198.4 & 197.57 & 194.75 & 193.49 & 183.09 \\
+                \hline
+                \textbf{final} &  &  &  & & \\
+                \textbf{harmonic mean} & 117.22 & 114.91 & 127.01 & 137.18 & 185.67\\
+                \hline
+
+            \end{tabular}
+            \label{tab1}
+        \end{center}
+    \end{table}
+
     \subsection{Time Analysis}\label{subsec:time-analysis}
     Since the match time is relevant, the machine on which the games were run is also relevant.
     The tests were run on an i7 4750HQ processor.
     The training was done on 3 threads.
     All computations were done on the CPU\@.
     The median game time during training is 28 seconds.
-    (todo: include median nr of epochs at testing)
+    The average number of frames per game is 287.
 
     \begin{thebibliography}{00}
         \bibitem{evoman} Fabricio Olivetti de Franca, Denis Fantinato, Karine Miras, A.E. Eiben and Patricia A. Vargas.
