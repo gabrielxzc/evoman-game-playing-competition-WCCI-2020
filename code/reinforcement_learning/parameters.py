@@ -11,7 +11,7 @@ import os
 # corrected
 # [2, 3, 6, 7] 95.69
 
-ENEMIES_CHOSEN_FOR_TRAINING = [1, 2, 6, 7]
+ENEMIES_CHOSEN_FOR_TRAINING = [1, 2, 3, 4, 5, 6, 7, 8]
 
 MODEL_HIDDEN_LAYERS_SIZES = (64, 64)
 MODEL_ACTIVATION = torch.nn.Tanh
@@ -29,6 +29,9 @@ EPOCHS = 250  # 2000
 
 model_name = sorted(os.listdir('trained_models/reinforcement_learning'))[-1]
 STARTING_MODEL_PATH = f'../trained_models/reinforcement_learning/{model_name}'
+
+# STARTING_MODEL_PATH = None
+
 IS_STARTING_MODEL_PSO = False
 
 NR_PARALLEL_PROCESSES = 3

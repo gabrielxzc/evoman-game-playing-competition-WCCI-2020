@@ -42,7 +42,6 @@ def save_csv_results(model_name, results):
 
 
 def test_model(model_name, ENEMIES_CHOSEN_FOR_TESTING=range(1, 9), NR_EXPERIMENTS_FOR_EACH_ENEMY=30):
-
     # Start of code without hacks
     MODEL_PATH = f'../trained_models/reinforcement_learning/{model_name}'
     model = torch.load(os.path.join(MODEL_PATH, 'pyt_save', 'model.pt'))
@@ -83,8 +82,7 @@ def test_model(model_name, ENEMIES_CHOSEN_FOR_TESTING=range(1, 9), NR_EXPERIMENT
             [enemy, gains[-1], average_player_life, average_enemy_life, average_time, min_player_life, max_player_life,
              min_enemy_life, max_enemy_life, min_time, max_time])
 
-    save_csv_results(model_name, results)    # always `evoman_framework`
-
+    save_csv_results(model_name, results)  # always `evoman_framework`
 
     harmonic_mean_of_gains = len(gains) / np.sum(1.0 / np.array(gains))
     return harmonic_mean_of_gains
@@ -102,4 +100,15 @@ def test_models(models):
 
 
 if __name__ == '__main__':
-    test_models([])
+    test_models(['1593196354.556512',
+                 '1593241593.7984622',
+                 '1593247383.7798543',
+                 '1593253419.8104591',
+                 '1593259634.755718',
+                 '1593265879.0949752',
+                 '1593272302.7187254',
+                 '1593278800.13606',
+                 '1593285197.2534902',
+                 '1593291408.720644',
+                 '1593297821.159123',
+                 '1593304049.8160946'])
