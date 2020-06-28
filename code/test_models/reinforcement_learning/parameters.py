@@ -1,6 +1,7 @@
 import os
 
 ENEMIES_CHOSEN_FOR_TESTING = range(1, 9)
+ENEMIES_DIFFICULTY = 2
 NR_EXPERIMENTS_FOR_EACH_ENEMY = 30
 
 # model_name = sorted(os.listdir('../trained_models/reinforcement_learning'))[-1]

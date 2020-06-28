@@ -55,7 +55,8 @@ for enemy in parameters.ENEMIES_CHOSEN_FOR_TESTING:
     for experiment in range(parameters.NR_EXPERIMENTS_FOR_EACH_ENEMY):
         evoman_environment = EvomanEnvironmentWrapper('evoman rl test',
                                                       player_controller=TestReinforcementLearningEvomanPlayerController(),
-                                                      enemies=[enemy])
+                                                      enemies=[enemy],
+                                                      level=parameters.ENEMIES_DIFFICULTY)
         _, player_life, enemy_life, time = evoman_environment.play(pcont=model)
 
         number_of_games_lost += 1 if player_life == 0 else 0

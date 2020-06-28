@@ -93,9 +93,9 @@ class PPOBuffer:
 
 
 def ppo(actor_critic=core.MLPActorCritic, ac_kwargs=dict(), seed=0, steps_per_epoch=4000, epochs=50,
-        enemies=[1, 4, 6, 7], gamma=0.99, clip_ratio=0.2, pi_lr=3e-4, vf_lr=1e-3, train_pi_iters=80,
-        train_v_iters=80, lam=0.97, target_kl=0.01, logger_kwargs=dict(), save_freq=10, starting_actor_critic=None,
-        is_starting_actor_critic_pso=False):
+        enemies=[1, 4, 6, 7], enemies_difficulty=2, gamma=0.99, clip_ratio=0.2, pi_lr=3e-4, vf_lr=1e-3,
+        train_pi_iters=80, train_v_iters=80, lam=0.97, target_kl=0.01, logger_kwargs=dict(), save_freq=10,
+        starting_actor_critic=None, is_starting_actor_critic_pso=False):
     """
     Proximal Policy Optimization (by clipping), 
 
@@ -312,7 +312,8 @@ def ppo(actor_critic=core.MLPActorCritic, ac_kwargs=dict(), seed=0, steps_per_ep
         while buf.ptr < local_steps_per_epoch:
             for enemy in enemies:
                 evoman_environment = ReinforcementLearningEvomanEnvironment('evoman reinforcement learning',
-                                                                            enemies=[enemy])
+                                                                            enemies=[enemy],
+                                                                            level=enemies_difficulty)
 
                 player_controller = ReinforcementLearningEvomanPlayerController(evoman_environment, buf, logger)
                 evoman_environment.player_controller = player_controller
