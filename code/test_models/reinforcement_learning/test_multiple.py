@@ -1,5 +1,5 @@
 # Fix error which might appear when this script is ran from the command line
-
+import json
 import sys
 import os
 
@@ -37,7 +37,7 @@ def save_csv_results(model_name, results):
         csvwriter = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         csvwriter.writerow(
             ['enemy', 'gain', 'avg_player_life', 'avg_enemy_life', 'avg_duration', 'min_player_life', 'max_player_life',
-             'min_enemy_life', 'max_enemy_life', 'min_duration', 'max_duration'])
+             'min_enemy_life', 'max_enemy_life', 'min_duration', 'max_duration', 'percentage_games_lost'])
         csvwriter.writerows(results)
 
 
@@ -46,6 +46,14 @@ def test_model(model_name, ENEMIES_CHOSEN_FOR_TESTING=range(1, 9), NR_EXPERIMENT
     MODEL_PATH = f'../trained_models/reinforcement_learning/{model_name}'
     model = torch.load(os.path.join(MODEL_PATH, 'pyt_save', 'model.pt'))
 
+    with open(os.path.join(MODEL_PATH, 'config.json')) as data_file:
+        data = json.load(data_file)
+        try:
+            difficulty = data['enemies_difficulty']
+        except Exception as e:
+            difficulty = 2
+
+    print(model_name, difficulty)
     gains = []
     results = []
 
@@ -53,12 +61,16 @@ def test_model(model_name, ENEMIES_CHOSEN_FOR_TESTING=range(1, 9), NR_EXPERIMENT
         min_player_life, max_player_life, average_player_life = 100, 0, 0
         min_enemy_life, max_enemy_life, average_enemy_life = 100, 0, 0
         min_time, max_time, average_time = 100000000, 0, 0
+        number_of_games_lost = 0
 
         for experiment in range(NR_EXPERIMENTS_FOR_EACH_ENEMY):
             evoman_environment = EvomanEnvironmentWrapper('evoman rl test',
                                                           player_controller=TestReinforcementLearningEvomanPlayerController(),
-                                                          enemies=[enemy])
+                                                          enemies=[enemy],
+                                                          level=difficulty)
             _, player_life, enemy_life, time = evoman_environment.play(pcont=model)
+
+            number_of_games_lost += 1 if player_life == 0 else 0
 
             min_player_life = min(min_player_life, player_life)
             max_player_life = max(max_player_life, player_life)
@@ -76,11 +88,12 @@ def test_model(model_name, ENEMIES_CHOSEN_FOR_TESTING=range(1, 9), NR_EXPERIMENT
         average_player_life /= NR_EXPERIMENTS_FOR_EACH_ENEMY
         average_enemy_life /= NR_EXPERIMENTS_FOR_EACH_ENEMY
         average_time /= NR_EXPERIMENTS_FOR_EACH_ENEMY
+        percentage_of_games_lost = 100 * number_of_games_lost / NR_EXPERIMENTS_FOR_EACH_ENEMY
 
         gains.append(100.01 + average_player_life - average_enemy_life)
         results.append(
             [enemy, gains[-1], average_player_life, average_enemy_life, average_time, min_player_life, max_player_life,
-             min_enemy_life, max_enemy_life, min_time, max_time])
+             min_enemy_life, max_enemy_life, min_time, max_time, percentage_of_games_lost])
 
     save_csv_results(model_name, results)  # always `evoman_framework`
 
@@ -100,4 +113,4 @@ def test_models(models):
 
 
 if __name__ == '__main__':
-    test_models([])
+    test_models(list(sorted(os.listdir('../trained_models/reinforcement_learning'))[-(12 * 4):]))
