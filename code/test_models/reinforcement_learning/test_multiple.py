@@ -52,8 +52,9 @@ def test_model(model_name, ENEMIES_CHOSEN_FOR_TESTING=range(1, 9), NR_EXPERIMENT
             difficulty = data['enemies_difficulty']
         except Exception as e:
             difficulty = 2
+        ENEMIES_CHOSEN_FOR_TESTING = data['enemies']
 
-    print(model_name, difficulty)
+    print(model_name, difficulty, ENEMIES_CHOSEN_FOR_TESTING)
     gains = []
     results = []
 
@@ -113,4 +114,4 @@ def test_models(models):
 
 
 if __name__ == '__main__':
-    test_models(list(sorted(os.listdir('../trained_models/reinforcement_learning'))[-(12 * 4):]))
+    test_models(list(sorted(os.listdir('../trained_models/reinforcement_learning'))[-8:]))
