@@ -545,6 +545,104 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \end{center}
     \end{table}
 
+    \subsection{Specialized PPO}\label{subsec:specialized-ppo}
+    In order to obtain a score higher than the upper bound we have tried two methods:
+    \begin{itemize}
+        \item A generalized PPO agent trained against all $8$ opponents.
+        \item A specialized PPO agent for each of the $8$ opponents.
+    \end{itemize}
+
+    \subsubsection{PPO trained against all opponents}
+    At the default difficulty of 2, a PPO agent trained against all opponents
+    obtained a final gain of 185.57, being lower with 0.1 than the
+    upper bound found with specialized NEAT\@.
+    For such an agent we have also studied how its gain changes when the difficulty
+    is modified.
+    \begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/general_harmonic_gain.eps}
+    \caption{Gain Evolution for PPO when trained against all 8 opponents.}
+    \label{fig:ppo_train_8}
+    \end{figure}
+
+    \begin{table}[htbp]
+        \caption{PPO trained against all opponents (Gain)}
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|c|c|}
+                \hline
+                \textbf{Opponent}&\multicolumn{5}{|c|}{\textbf{Difficulty}} \\
+                \cline{2-6}
+                & \textbf{\textit{1}}& \textbf{\textit{2}}& \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
+                \hline
+                 1 &  200.01 &  199.54 &  170.75 &  155.48 &   41.08\\
+                 2 &  200.01 &  200.01 &  182.81 &  168.81 &  168.51\\
+                 3 &  199.38 &  194.81 &  164.31 &  127.54 &  130.61\\
+                 4 &  186.14 &  180.61 &  154.23 &  181.58 &   60.28\\
+                 5 &  196.56 &  187.77 &  185.34 &  142.41 &  158.31\\
+                 6 &  196.35 &  174.43 &  179.19 &   23.84 &    9.88\\
+                 7 &  199.26 &  183.07 &   95.40 &    8.01 &    8.28\\
+                 8 &  196.57 &  169.31 &  123.00 &   41.34 &   10.01\\
+                \hline
+                \textbf{harmonic mean} & 196.68 & 185.57 & 149.57 & 35.76 & 20.89 \\
+                \hline
+            \end{tabular}
+            \label{PPO against all opponents gain}
+        \end{center}
+    \end{table}
+
+    \begin{table}[htbp]
+        \caption{PPO trained against all opponents (percent games lost)}
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|c|c|}
+                \hline
+                \textbf{Opponent}&\multicolumn{5}{|c|}{\textbf{Difficulty}} \\
+                \cline{2-6}
+                & \textbf{\textit{1}}& \textbf{\textit{2}}& \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
+                \hline
+                 1 &  0 &  0 &     20 &  23.33 &   100 \\
+                 2 &  0 &  0 &      0 &      0 &     0 \\
+                 3 &  0 &  0 &      0 &  13.33 &  3.33 \\
+                 4 &  0 &  0 &      0 &      0 &    60 \\
+                 5 &  0 &  0 &      0 &      0 &     0 \\
+                 6 &  0 &  0 &      0 &    100 &   100 \\
+                 7 &  0 &  0 &  56.66 &    100 &   100 \\
+                 8 &  0 &  0 &     10 &    100 &   100 \\
+                \hline
+            \end{tabular}
+            \label{PPO against all opponents games lost}
+        \end{center}
+    \end{table}
+
+
+    \subsubsection{A PPO agent for each opponent}
+    In the second attempt to outscore the upper bound we have trained an agent
+    for each of the $8$ opponents.
+    Due to the high computational time this experiment was done only at
+    difficulty 2 and the number of training epochs for PPO was decreased from 3000 to 1000.
+    It won all its games against all opponents at difficulty 2.
+    \begin{table}[htbp]
+        \caption{PPO generalized vs PPO specialized vs NEAT specialized}
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                \textbf{Opponent}&\textbf{PPO g.}&\textbf{PPO s.}&\textbf{NEAT s.} \\
+                \hline
+                 1 &  199.54 &  199.67 &  190.01 \\
+                 2 &  200.01 &  199.61 &  194.01 \\
+                 3 &  194.81 &  199.94 &  180.01 \\
+                 4 &  180.61 &  195.95 &  194.01 \\
+                 5 &  187.77 &  198.03 &  194.01 \\
+                 6 &  174.43 &  199.67 &  173.01 \\
+                 7 &  183.07 &  197.73 &  177.01 \\
+                 8 &  169.31 &  195.07 &  186.01 \\
+                \hline
+                \textbf{harmonic mean} & 185.57 & 198.19 & 185.67 \\
+                \hline
+            \end{tabular}
+            \label{PPO generalized vs specialized vs NEAT}
+        \end{center}
+    \end{table}
+
     \subsection{Time Analysis}\label{subsec:time-analysis}
     Since the match time is relevant, the machine on which the games were run is also relevant.
     The tests were run on an i7 4750HQ processor.
@@ -577,6 +675,3 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     \end{thebibliography}
 
 \end{document}
-
-
-
