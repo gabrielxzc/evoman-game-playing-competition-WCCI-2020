@@ -1,0 +1,25 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Problem Description}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Environment}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Problem}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{Approach}{}% 5
+\BOOKMARK [2][-]{subsection.3.1}{Q-Learning}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.2}{Evolving Neural Network Weights with Genetic Algorithms}{section.3}% 7
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Sparse Reward Genetic Algorithm}{subsection.3.2}% 8
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Iterative Genetic Algorithm}{subsection.3.2}% 9
+\BOOKMARK [2][-]{subsection.3.3}{Searching Neural Network Weights with Particle Swarm Optimization}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.4}{Proximal Policy Optimization}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.5}{Particle Swarm Optimization Cascaded With Proximal Policy Optimization}{section.3}% 12
+\BOOKMARK [1][-]{section.4}{Experimental Investigation}{}% 13
+\BOOKMARK [2][-]{subsection.4.1}{Q-Learning}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.2}{Genetic Algorithms}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.3}{Particle Swarm Optimization}{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Results}{}% 17
+\BOOKMARK [2][-]{subsection.5.1}{Best Combination of Opponents for Training}{section.5}% 18
+\BOOKMARK [2][-]{subsection.5.2}{Random Initialization PPO vs PSO Cascading PPO}{section.5}% 19
+\BOOKMARK [2][-]{subsection.5.3}{PPO on the best configuration}{section.5}% 20
+\BOOKMARK [2][-]{subsection.5.4}{Best Train Agent vs Best Tested Agent}{section.5}% 21
+\BOOKMARK [2][-]{subsection.5.5}{Comparison with the Upper Bound}{section.5}% 22
+\BOOKMARK [2][-]{subsection.5.6}{Time Analysis}{section.5}% 23
+\BOOKMARK [1][-]{section.6}{Conclusions}{}% 24
+\BOOKMARK [1][-]{section*.1}{References}{}% 25
