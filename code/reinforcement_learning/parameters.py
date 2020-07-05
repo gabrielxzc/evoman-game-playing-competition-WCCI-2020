@@ -11,7 +11,16 @@ import os
 # corrected
 # [2, 3, 6, 7] 95.69
 
-ENEMIES_CHOSEN_FOR_TRAINING = [3]
+# 1 - laptop. done
+# 2 - laptop. done
+# 3 - laptop. done
+# 4 - pc. done
+# 5 - laptop. done
+# 6 - pc. done
+# 7 - laptop. in progress
+# 8 - pc. in progress
+
+ENEMIES_CHOSEN_FOR_TRAINING = [8]
 ENEMIES_DIFFICULTY = 2
 
 MODEL_HIDDEN_LAYERS_SIZES = (64, 64)
