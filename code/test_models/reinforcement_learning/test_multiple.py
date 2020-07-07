@@ -48,13 +48,13 @@ def test_model(model_name, ENEMIES_CHOSEN_FOR_TESTING=range(1, 9), NR_EXPERIMENT
 
     with open(os.path.join(MODEL_PATH, 'config.json')) as data_file:
         data = json.load(data_file)
-        try:
-            difficulty = data['enemies_difficulty']
-        except Exception as e:
-            difficulty = 2
+        # try:
+        #     difficulty = data['enemies_difficulty']
+        # except Exception as e:
+        #     difficulty = 2
         ENEMIES_CHOSEN_FOR_TESTING = data['enemies']
-
-    print(model_name, difficulty, ENEMIES_CHOSEN_FOR_TESTING)
+    difficulty = 5
+    print(model_name, ENEMIES_CHOSEN_FOR_TESTING)
     gains = []
     results = []
 
