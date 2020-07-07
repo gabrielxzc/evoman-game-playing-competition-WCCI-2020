@@ -33,7 +33,7 @@ MODEL_HIDDEN_LAYERS_SIZES = (64, 64)
 MODEL_ACTIVATION = torch.nn.Tanh
 
 STEPS_PER_EPOCH = 10000
-EPOCHS = 2  # 1000 2000
+EPOCHS = 1000  # 1000 2000
 
 # trained_models/pso_bootstrap/[1, 2, 6, 7]/47.98_1591201550.222573.pickle 43.2
 # trained_models/pso_bootstrap/[1, 2, 6, 7]/52.13_1591215640.939492.pickle 42.7
