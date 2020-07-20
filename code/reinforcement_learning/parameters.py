@@ -27,7 +27,7 @@ import os
 #     file.write(f'\n{last + 1}')
 #
 # ENEMIES_CHOSEN_FOR_TRAINING = [last + 1]
-ENEMIES_DIFFICULTY = 3
+ENEMIES_DIFFICULTY = 1
 
 MODEL_HIDDEN_LAYERS_SIZES = (64, 64)
 MODEL_ACTIVATION = torch.nn.Tanh
