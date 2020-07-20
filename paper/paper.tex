@@ -6,7 +6,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage{hyperref}
+\usepackage[draft]{hyperref}
 
 \selectcolormodel{cmyk}
 
@@ -22,70 +22,65 @@
 T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-    \title{A Comparison of Algorithms Playing EvoMan}
+    \title{Increasing the Upper Bound for the EvoMan Game Competition}
 
-    \author{\IEEEauthorblockN{1\textsuperscript{st} Given Name Surname}
-    \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-    \textit{name of organization (of Aff.)}\\
-    City, Country \\
-    email address or ORCID}
-    \and
-    \IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
-    \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-    \textit{name of organization (of Aff.)}\\
-    City, Country \\
-    email address or ORCID}
-    \and
-    \IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
-    \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-    \textit{name of organization (of Aff.)}\\
-    City, Country \\
-    email address or ORCID}
-    }
+    \author{\IEEEauthorblockN{Gabriel-Codrin \textbf{Cojocaru}}
+        \IEEEauthorblockA{\textit{Faculty of Computer Science} \\
+            \textit{``Al. I. Cuza'' University}\\
+            Iasi, Romania \\
+            gabriel.cojocaru@info.uaic.ro}
+          \and
+          
+          \IEEEauthorblockN{Sergiu-Andrei \textbf{Dinu}}
+          \IEEEauthorblockA{\textit{Faculty of Computer Science} \\
+            \textit{``Al. I. Cuza'' University}\\
+            Iasi, Romania \\
+            sergiu.dinu@info.uaic.ro}
+      
+        \and
+        \IEEEauthorblockN{Eugen \textbf{Croitoru}}
+        \IEEEauthorblockA{\textit{Dept. of Computer Science} \\
+          \textit{``Al. I. Cuza'' University}\\
+          Iasi, Romania \\
+          eugennc@uaic.ro}
+      }
 
     \maketitle
 
     \begin{abstract}
-        This paper describes a comparison between algorithms for evolving agents for the game Evoman.
-        We have tried a cascade ensemble method, starting with an algorithm that is either fast either has
-        an explorative bias and refining its solution with an exploitative algorithm.
-        The algorithms we have tested for the first stage are Q-learning, genetic algorithms and particle swarm optimization.
-        All of these algorithms are searching for the weights of a neural network of a fixed structure.
-        Both the genetic algorithms and the particle swarm optimization algorithms were tested with a sparse and
-        an iterative approach.
-        The best explorative algorithm was the sparse particle swarm optimization.
-        The exploitative algorithm we tested is proximal policy optimization.
-        Using PPO with random initialization lead to better results than an ensemble method of PSO cascaded with PPO\@.
-        We also detected overfitting of the agent trained with PPO\@.
+      This paper describes a comparison between algorithms for evolving agents able to play the game Evoman.
+      Our team took part in the ``Evoman: Game-playing Competition for WCCI 2020'', and won second place;
+      beyond finding a good agent to satisfy the requirements of the competition - which aim at a good ability to generalise -,
+      we have surpassed the existing non-general, best-known upper-bound.
+      We have managed to exceed this upper bound with a Proximal Policy Optimization algorithm, by discarding the competition requirements to generalise.
+      We also present our other exploratory attempts: Q-learning, Genetic Algorithms, Particle Swarm Optimisation, and their PPO hybridizations. 
+      Finally, we map the behaviour of our algorithm in the space of game difficulty, generating plausible extensions to the existing upper-bound.
     \end{abstract}
 
     \begin{IEEEkeywords}
-        game-playing agent, artificial intelligence, EvoMan, genetic algorithm, reinforcement learning,
-        q-learning, neuroevolution, particle swarm optimization, proximal policy optimization, ppo
+        game-playing agent, Artificial Intelligence, EvoMan, Genetic Algorithm, Reinforcement Learning,
+        Q-learning, Neuroevolution, Particle Swarm Optimization, Proximal Policy Optimization
     \end{IEEEkeywords}
 
 
     \section{Introduction}\label{sec:introduction}
-    This paper presents our solution for the "Evoman: Game-playing Competition for WCCI 2020"\cite{evoman_competition}.
-    We are attempting to train an agent playing the 2D shooting game Evoman\cite{evoman}.
-    We have tried an ensemble cascade method with two stages.
-    For the first stage we tested algorithms that either found acceptable solutions fast either had a high
-    explorative bias.
-    The algorithms we considered for this stage are Q-Learning\cite{q_learning}, genetic algorithms\cite{genetic_algorithm}
-    and particle swarm optimization\cite{pso}.
-    Both the GA and the PSO train the weights of a neural network of a fixed structure.
-    Both the GA and the PSO were tested with a sparse approach and an iterative approach.
-    For the exploitative stage we used Proximal Policy Optimization\cite{ppo}.
+    This paper contains our improvement on the upper-bound for playing the 2D shooting / platformer game Evoman\cite{evoman}.
+    Our team took part in the ``Evoman: Game-playing Competition for WCCI 2020''\cite{evoman_competition}. While placing second\cite{evoman_competition_results}, we have managed to exceed the best-known upper-bound. This difference is due to the competition requirements for generalisation; the upper-bound has been provided by the organisers by dropping such requirements, and only by doing the same could we exceed it.
 
+    Our initial exploratory attempts focused on an ensemble, $2$-stage cascade method. The first stage, designed to find good candidate solutions quickly, was either a Q-Learning\cite{q_learning}, a Genetic Algorithm\cite{genetic_algorithm} or Particle Swarm Optimization\cite{pso} algorithm. The candidate solutions are weights on a fixed-structure Artificial Neural Network, which plays the Evoman game. The second stage, aimed at further refining the solutions found by the first stage, is a slower Proximal Policy Optimization\cite{ppo} algorithm.
+
+    However, a simple random initialisation outperforms any of the first-stage algorithms, and the later experiments use PPO alone.
+
+    The competition required the algorithm to train with half the opponents in the game, and to test with all of them. Our method shows significant overfit in this challenge. However, its otherwise good performance makes it appropriate for setting a new upper bound, since the upper bound is being computed individually, by training and testing against each opponent in the Evoman game.
 
     \section{Problem Description}\label{sec:problem-description}
 
     \subsection{Environment}\label{subsec:environment}
 
-    EvoMan~\cite{karinemiras,evoman} is a framework for testing competitive game-playing agents.
-    This framework is inspired by Mega Man II~\cite{capcom}, the game created by Capcom.
-    EvoMan is a 2D shooting game where the player controls an agent playing against an opponent.
-    The agent will collect information about the environment through 20 sensors (Fig 1):
+    Evoman\cite{karinemiras,evoman} is a framework for testing competitive game-playing agents.
+    This framework is inspired by Mega Man II\cite{capcom}, a game created by Capcom.
+    Evoman is a 2D shooting game where the player controls an agent playing against an opponent.
+    The agent will collect information about the environment through 20 sensors (Fig. 1):
     \begin{itemize}
         \item 16 correspond to horizontal and vertical distances to a maximum of 8 different opponent projectiles.
         \item 2 correspond to the horizontal and vertical distance to the enemy.
@@ -97,399 +92,258 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \caption{Sensors available for the player\cite{evoman}.}
         \label{fig:sensors}
     \end{figure}
-    The actions which the agent may take are:
-    \begin{itemize}
-        \item walk left
-        \item walk right
-        \item jump
-        \item shoot
-        \item release of the jump
-    \end{itemize}
+    The 5 actions which the agent may take are: walk left, walk right, shoot, press jump, release jump.
 
-    The lives of the player and the enemy start at 100.
-    Everytime one of them gets hit, their life deplenishes.
-    Whoever's life reaches 0 loses the game.
+    The player and opponent start with 100 life points. On each hit received, their life points decrease.
+    The player wins by reducing the opponent's life points to $0$, and lose if their life points are reduced to $0$ first.
 
-    In the original Capcom game the player would have to beat $8$ opponents and acquire their weapons
-    as they are defeated.
+    In the original Capcom game, the player would have to beat $8$ opponents and acquire their weapons
+    once they are defeated.
     The additional difficulty of EvoMan comes from the fact that the player has to defeat all
     the opponents using only the starting weapon.
-    Each opponent can be fought on a specified difficulty level.
+    Each opponent can be fought at a specific difficulty level.
     The difficulty level is an integer greater or equal than $1$ which is translated into a factor for the damage
-    taken and damage given by the player, the higher the difficulty level the lower the damage given and the higher the damage taken.
-    The framework is freely available\footnote{\url{https://github.com/karinemiras/evoman_framework}}
-    and it is currently compatible with Python 3.6 and 3.7.
+    taken and damage given by the player; the higher the difficulty level the lower the damage given, and the higher the damage taken.
+    The framework is freely available\footnote{\url{https://github.com/karinemiras/evoman_framework}}.
     There is also an extensive documentation
     available\footnote{\url{https://github.com/karinemiras/evoman_framework/blob/master/evoman1.0-doc.pdf}}.
 
     \subsection{Problem}\label{subsec:problem}
-    Beating an opponent is relatively easy when using specialized models against a specific enemy.
-    The authors of the EvoMan framework trained multiple specialized agents against all opponents.
-    After playing a game, the formula for the gain by which an agent is evaluated is:
-    \boldmath
+    How well an agent performs against an enemy is measured by how much damage they inflict, and how much damage to themselves they avoid - or, conversely, how much life points they have remaining, and how much life points the opponent has at the end of the game:
+
     \begin{gather*}
-        gain = 100.01 + player\_life - enemy\_life
+      gain = 100.01 + player\_life - enemy\_life \hspace{1cm} (1)
     \end{gather*}
-    \unboldmath
-    The highest final gain is 185.67\cite{evoman} and it was obtained with the NEAT\cite{neat} algorithm. \\
 
-    The problem we are trying to solve is a generalization of the one above.
-    We are to train an agent against four enemies and then test its performance against all eight.
-    The final score metric of an agent is the harmonic mean of the gains against all enemies.
-    The combination of four enemies we are to train the agent is not fixed.
-    The difficulty level for solving this problem is $2$ for all enemies in training and testing,
-    but we did some exploratory work with greater level of difficulties outside training and
-    testing for obtaining the final solution for the problem.
+    As both start with $100$ life points, the best possible value for gain is $200.01$, for a player which defeats the opponent without getting hit.
 
-    The specifications above, like the number of enemies chosen for training or the difficulty level,
-    come directly from a competition organized by the creators of the framework\cite{evoman_competition}.
+    The best known gain was $185.67$ (as a harmonic average of $8$ values, each for one of the $8$ opponents)
+    \cite{evoman} and was obtained with a NEAT\cite{neat} algorithm. It is this value we've tried to exceed.\\
 
+    There are also various levels of generalisation available; the least is training a single agent on a single opponent, as the above method does. The next is training a single agent on all opponents: instead of having $8$ specialised models for each opponent, a single unified model, trained on all $8$, could be attempted. Furthermore, we could train a single agent on a subset of the $8$, and test that agent on the full $8$. The competition\cite{evoman_competition} allowed free choice of $4$ training agents, and testing against all $8$.
 
+    Another level of generalisation is learning from one difficulty level and applying to the others. While seeing this possibility, we did not attempt such a task, due to the current high difficulty of the problem.
+    
     \section{Approach}\label{sec:approach}
-    Our intention was to develop a cascade ensemble method where the resulting model of an algorithm
-    which can achieve a decent gain fast or has a high exploratory bias is the starting point of an algorithm with high exploitative bias.
-    The algorithm we expected to obtain a decent gain fast is a classic Q-learning\cite{q_learning} algorithm. The exploratory algorithms we have considered are genetic algorithms\cite{genetic_algorithm} and particle swarm optimization\cite{pso}.
-    The exploitative algorithm we used was Proximal Policy Optimization\cite{ppo}.
+    Our initial intention was to develop a cascade ensemble method where a fast algorithm could provide a better starting point to a slower algorithm.
+    We expected the classic Q-learning\cite{q_learning} algorithm to quickly obtain a decent gain. Two more exploratory algorithms we have considered are Genetic Algorithms\cite{genetic_algorithm} and Particle Swarm Optimisation\cite{pso}.
+    The slower algorithm, intended to exploit the starting points provided by the first algorithm in the cascade, is a Proximal Policy Optimization\cite{ppo} algorithm.
 
-    To find the best bootstraping algorithm we have made the following changes, which had no impact in the training and testing for the final solution to the problem:
+    To find the best first-stage algorithm we have made the following changes (which had no impact in the training and testing for the final solution to the problem, other than guiding the choice of algorithm):
     \begin{itemize}
-        \item we have increased the difficulty from the default 2 to 5.
+        \item we have increased the difficulty from the default 2 up to 5.
         \item the evaluation is made only on the second opponent due to the varied environment.
         \item the gain function was modified as in Karine Miras' analysis\cite{evoman_blog} to:
-        \boldmath
         \begin{gather*}
+          fitness = 
             0.9 \cdot (100 - enemy\_life) + 0.1 \cdot player\_life\\
-            -\hspace{0.2cm} ln(nr\_of\_game\_timesteps)\\
+            -\hspace{0.2cm} ln(nr\_of\_game\_timesteps) \hspace{1cm} (2)
         \end{gather*}
-        \unboldmath
     \end{itemize}
+
+    The best possible value for the fitness is $100$.
 
     The best exploratory algorithm would be trained on four enemies and
-    used in cascade with proximal policy optimization without the changes mentioned in this section.
+    used in cascade with PPO, without the changes mentioned in this section.
 
+    \subsection{Solution structure}
+    In all cases, a candidate solution is a fixed-structure feedforward Artificial Neural Network.
+
+    The input and output layers are determined by the game framework. Each game frame gives us $20$ sensor values, and we also remember the past $2$ frames, alongside the movements we've made. Thus, $3 \cdot 20 + 2 = 62$ inputs.
+
+    We've decided on two hidden layers. At first, we've used $32$ perceptrons on each, but later extended to $64$ (only when using PPO). We haven't increased the number of perceptrons or hidden layers further, since our main issue proved to be overfit, not the ANN's inability to properly approximate the required function\cite{cybenko}.
+    The activation function used is the Logistic Sigmoid; each layer has l2 regularisation applied to it, and each weight has a decay of $0.01$.
+    The weights are initialised in the range $[-2, 2]$, with a minimum precision of $6$ decimal paces.
+    
+    
     \subsection{Q-Learning}\label{subsec:q-learning}
-    The algorithm we expected to obtain a decent gain fast is a classic Q-learning\cite{q_learning} algorithm with neural networks.
+    We used a classic Q-Learning ANN to predict the reward function for each possible move.
+    After each predicted move, we update the neural network using backpropagation. We compute the reward as the difference between the current score and the previous score:
+    
+    $ (prev\_enemy\_life - curr\_enemy\_life) \cdot 0.8 + (curr\_player\_life - prev\_player\_life) \cdot 0.2 $
+    
+    We have trained the agent on $5000$ games.
+%    The (arithmetic) average number of frames per game for the best model is $287$.
 
-    We used a neural network to predict the reward function for each possible move
-    (left, right, shoot, jump, release of jump) from a given state.
-    We then take the action with the highest predicted reward.
-    The input of this neural network is composed of the current game sensors and the
-    previous 2 game sensors with the moves taken at that specific point.
-
-    The neural network used for experiments has 2 hidden layers with 32 neurons each.
-    Each layer has l2 regularization applied with a weight decay of 0.01 and sigmoid activation.
-    After each predicted move, we updated the neural network using backpropagation,
-    using as input the game sensors and as output the true reward function.
-    A game ends when either the agent or the enemy lose all life.
-    We have trained the agent on 5000 games.
-    The average number of frames per game for the best model is 287.
-
-    \subsection{Evolving Neural Network Weights with Genetic Algorithms}\label{subsec:evolving-neural-network-weights-with-genetic-algorithms}
-    We used genetic algorithms to evolve the weights of neural networks with fixed structures.
-
-    \subsubsection{Sparse Reward Genetic Algorithm}
-    The second algorithm is a sparse reward neuroevolution\cite{neuro}.
-    The reward is defined as "sparse" because an agent doesn't find out how well it's doing until
+    \subsection{Sparse Reward Genetic Algorithm}
+    The second algorithm is a sparse reward Neuroevolution\cite{neuro} algorithm.
+    The reward is defined as ``sparse'' because an agent doesn't find out how well it's doing until
     the end of the game, with no feedback during the game.
-    An individual is represented as the weights of a neural network.
-
-    The neural network role is to predict the next move using the current game sensors and
-    the previous 2 game sensors with the moves taken at that specific point.
-    We used 2 hidden layers with 32 neurons for each individual.
-
-    We start with randomly initialized neural network weights and then represent them as a bitstring.
-    The weights used for the neural network were values between 2 and -2 with a precision of 6 digits.
-
-    For evaluation, the bitstring is transformed into the weights of the neural network and a game is played,
-    from which we can obtain the individual fitness.
+    An individual represents the binary encoding of the weights of a Neural Network.
 
     Since we are representing the individuals as bitstrings we were able to apply
-    a simple genetic algorithm\cite{genetic_algorithm}.
+    a Simple Genetic Algorithm\cite{genetic_algorithm}.
 
-    The configurations we have used for the genetic algorithm is:
+    \pagebreak
+    
+    The configurations we have used for the GA are:
     \begin{itemize}
-        \item population size: 50
-        \item number of generation: 500
-        \item crossover rate: 0.7
-        \item mutation rate: \{0.008, 0.1\}
-        \item elitism: 1
+        \item population size: $50$
+        \item number of generations: $500$
+        \item crossover rate: $0.7$
+        \item mutation rate: $\{0.008, 0.1\}$
+        \item elitism: $1$ individual
     \end{itemize}
-    We have tried two experiments with different mutation rates in order to observe whether a very high
-    mutation rate can lead to good results for the problem. \\
+    We have tried $2$ experiments with different mutation rates in order to observe if a high
+    mutation rate can lead to good results for the problem, since the role of this GA was
+    chiefly exploratory in our ensemble. \\
 
-    The solution of the genetic algorithm is the best individual from the last generation.
-    Since we have used an elitism of 1, this means that the solution of the genetic algorithm is
-    the best individual ever evaluated.
+    The solution of the GA is the best individual from the last generation.
 
-    \subsubsection{Iterative Genetic Algorithm}
-    The next algorithm is an iterative neuroevolution.
+    \subsection{Iterative Genetic Algorithm}
+    The next algorithm is an iterative neuroevolution one.
     It is "iterative" because the agents are trained on a small number of game steps
-    first and then the number of game steps slowly increases.
+    first, and then the number of game steps slowly increases. We've used this approach in order to save time; we believe it is reasonable to expect the initial agents to perform poorly, and thus require less time to decide on their quality.
 
-    After a number of generations we increase the number of game timesteps the agents are allowed to train on.
-    The fitness function was scaled based on the number of game timesteps in a way that if an agent
-    training on x game timesteps will always have a fitness lower than an agent training on y game
-    timesteps if x is lower than y.
+    The fitness function is scaled based on the number of game timesteps in a way that an agent
+    training on fewer timesteps will always have a fitness lower than an agent training on more timesteps.
 
-    \subsection{Searching Neural Network Weights with Particle Swarm Optimization}\label{subsec:searching-neural-network-weights-with-particle-swarm-optimization}
-    We have used particle swarm optimization\cite{pso} to search for the weights of a neural network of a
-    fixed structure which maximize the fitness defined in this section.
-    We used the same neural network configuration as in the case of genetic algorithms. \\
-
-    The configurations used for the particle swarm optimization\cite{pso} algorithm are:
+    \subsection{Particle Swarm Optimization}\label{subsec:searching-neural-network-weights-with-particle-swarm-optimization}
+    The configurations used for the PSO are:
     \begin{itemize}
-        \item population size: 30
-        \item number of iterations: 200
-        \item cognitive weight: \{0.4, 0.8, 1.5\}
-        \item social weight: \{0.8, 0.4, 3\}
-        \item inertia weight: \{constant 1, decreasing from 1 by 0.0035 every epoch\}
+        \item population size: $30$
+        \item number of iterations: $200$
+        \item cognitive weight: $\{0.4, 0.8, 1.5\}$
+        \item social weight: $\{0.8, 0.4, 3\}$
+        \item inertia weight: \{constant $1$, decreasing from $1$ by $0.0035$ every iteration\}
     \end{itemize}
-
-    The same separation between an sparse and an iterative search was made in the case
-    of particle swarm optimization, as in the case of the genetic algorithms.
-
-    We also tried to search with pso using an uniformly decreasing inertia weight with respect
-    to the percent of the iterations passed, having values from 1 to 0.3. The inertia weight controls the level of exploration versus exploitation, higher values in the beginning of the algorithm lead to better exploration while lower values towards the end of the algorithm lead to better exploitation.
-    This was tried to make the PSO focus even more on exploitation, rather than exploration.
+    The same separation between sparse and iterative evaluations was made in the case
+    of PSO, as was in the case of GA.
 
     \subsection{Proximal Policy Optimization}\label{subsec:proximal-policy-optimization}
-    PPO\cite{ppo} is the algorithm we have used for exploitation.
-    For this stage we have used the default difficulty of 2, the training was done on 4 opponents
-    and the evaluation was done as described in the Problem Description(\ref{sec:problem-description}).
-
-    The neural network is randomly initialized. \\
+    We have devoted significant computational resources to a PPO\cite{ppo}, expecting it to exploit and refine solutions.
     The configuration we have used for the PPO is:
     \begin{itemize}
-        \item hidden layers: (64, 64)
-        \item steps per epoch: 10000
-        \item epochs: 3000
-        \item gamma: 0.99
-        \item clip\_ratio: 0.2
-        \item pi\_lr: 3e-4
-        \item vf\_lr: 1e-3
-        \item train\_pi\_iterations: 80
-        \item train\_v\_iterations: 80
-        \item lambda: 0.97
-        \item target\_KL: 0.01
+        \item randomly initialized weights
+        \item steps per epoch: $10000$
+        \item epochs: $3000$
+        \item gamma: $0.99$
+        \item clip\_ratio: $0.2$
+        \item pi\_lr: $3e-4$
+        \item vf\_lr: $1e-3$
+        \item train\_pi\_iterations: $80$
+        \item train\_v\_iterations: $80$
+        \item lambda: $0.97$
+        \item target\_KL: $0.01$
     \end{itemize}
 
     \subsection{Particle Swarm Optimization Cascaded With Proximal Policy Optimization}\label{subsec:particle-swarm-optimization-cascaded-with-proximal-policy-optimization}
-    The output weights of a neural network resulted from a PSO search is the starting agent for PPO\@.
-    In order to solve the generalized problem we have made the following changes from the PSO from the exploratory stage:
-    \begin{itemize}
-        \item The sizes of the hidden layers were increased from (32, 32) to (64, 64).
-        \item It is trained on four opponents, not only one.
-        \item The fitness function is the one from the Problem Description (\ref{sec:problem-description}).
-    \end{itemize}
-    The same configuration was used for PPO as in the case of the PPO with random
-    weights initialization.
-
-
+    The output weight configuration of an Artificial Neural Network resulting from a PSO search is the starting agent for PPO\@.
+    While using the same PSO configuration as before, the ANN hidden layers size is increased from $32$ to $64$.
+    
     \section{Experimental Investigation}\label{sec:experimental-investigation}
 
-    \subsection{Q-Learning}\label{subsec:q-learning2}
-    The Q-learning algorithm was the starting point of our comparison.
-    Even when trained and evaluated against the same opponent, it would lose every game
+    The Q-learning algorithm serves as the starting point of our comparison.
+    Even when trained and evaluated against the same opponent, it loses every game
     while inflicting almost no damage.
 
-    \subsection{Genetic Algorithms}\label{subsec:genetic-algorithms}
-    The iterative genetic algorithm leads to much better results than Q-learning (Fig.~\ref{fig:q_vs_ga_iterative}).
-    \begin{figure}[!h]
-        \centering
-        \includegraphics[width=0.5\textwidth]{old_images/q_vs_ga_iterative.eps}
-        \caption{The fitness comparison between Q-learning and iterative genetic algorithms.}
-        \label{fig:q_vs_ga_iterative}
-    \end{figure}
-
-    We have shown that a mutation rate of 0.008 leads to better results than a mutation rate of 0.1 (Fig.~\ref{fig:ga_mutation_rates}).
-    \begin{figure}[!h]
-        \centering
-        \includegraphics[width=0.5\textwidth]{old_images/ga_mutation_rates.eps}
-        \caption{The fitness comparison between sparse genetic algorithms with mutation rate of 0.1 and 0.008.}
-        \label{fig:ga_mutation_rates}
-    \end{figure}
-
-    The results of the sparse genetic algorithm and the iterative genetic algorithm
+    The iterative GA leads to much better results than Q-learning (Fig.~\ref{fig:q_vs_ga_iterative}).
+    We've also chosen a mutation probability of $0.008$. The results of the sparse GA and the iterative GA
     are not significantly different (Fig.~\ref{fig:overview}).
 
-    \subsection{Particle Swarm Optimization}\label{subsec:sparse-particle-swarm-optimization}
-    Both particle swarm optimization algorithms lead to much better results than either of the
-    sparse and iterative genetic algorithms.
-    The iterative PSO lead to worse results than the sparse PSO\@.
-    In Fig.~\ref{fig:overview} we can see that the best exploratory algorithm is the sparse PSO\@.
-    \begin{figure}[!h]
+    Both PSO algorithms lead to much better results than either GA.
+    The iterative PSO leads to worse results than the sparse PSO\@.
+    In Fig.\ref{fig:overview} we can see that the best first-stage algorithm is the sparse PSO\@.
+    
+    We have tested PSO performance (Fig.~\ref{fig:pso_levels}), on multiple difficulties.
+
+    
+    \begin{figure}[!ht]
+        \centering
+        \includegraphics[width=0.5\textwidth]{old_images/q_vs_ga_iterative.eps}
+        \caption{The fitness comparison between Q-learning and iterative genetic algorithms. Difficulty: $5$.}
+        \label{fig:q_vs_ga_iterative}
+    \end{figure}
+      
+    \pagebreak
+
+    \begin{figure}[!ht]
         \centering
         \includegraphics[width=0.5\textwidth]{old_images/overview.eps}
         \caption{The fitness comparison between the iterative and the sparse approached,
-        both for the genetic algorithms and the PSO. }
+        both for the genetic algorithms and the PSO.  Difficulty: $5$.}
         \label{fig:overview}
     \end{figure}
 
-    The time advantage of iterative PSO vs sparse PSO is not significant (Fig.~\ref{fig:pso_sparse_vs_iterative_time}).
-    \begin{figure}[!h]
-        \centering
-        \includegraphics[width=0.5\textwidth]{old_images/pso_sparse_vs_iterative_time.eps}
-        \caption{The time comparison between sparse and iterative PSO.}
-        \label{fig:pso_sparse_vs_iterative_time}
-    \end{figure}
-
-    We have also searched for good PSO weights for our problem.
-    In the next stages we have used a cognitive weight of 0.4 and a social weight of 0.8 due to
-    its higher variance in results (Fig.~\ref{fig:pso_configs}).
-
-    \begin{figure}[!h]
-        \centering
-        \includegraphics[width=0.5\textwidth]{old_images/pso_configs.eps}
-        \caption{The fitness comparison between sparse PSO with different cognitive and social weights.}
-        \label{fig:pso_configs}
-    \end{figure}
-
-    We have also tried two PSO inertia weight updates (Fig.~\ref{fig:pso_inertia}).
-    We continued with the constant inertia weight approach.
-
-    \begin{figure}[!h]
-        \centering
-        \includegraphics[width=0.5\textwidth]{old_images/pso_inertia.eps}
-        \caption{The fitness comparison between PSO with constant inertia
-        weight and with uniformly decreasing in time inertia weight.}
-        \label{fig:pso_inertia}
-    \end{figure}
-
-    After deciding what the starting model should be, we have tested its performance (Fig.~\ref{fig:pso_levels})
-    and run time (Fig.~\ref{fig:pso_levels_time}) on multiple difficulties.
-
-    \begin{figure}[!h]
+    \begin{figure}[!ht]
         \centering
         \includegraphics[width=0.5\textwidth]{old_images/pso_levels.eps}
         \caption{The fitness comparison of PSO against different game difficulty levels.}
         \label{fig:pso_levels}
     \end{figure}
 
-
-    \begin{figure}[!h]
-        \centering
-        \includegraphics[width=0.5\textwidth]{old_images/pso_levels_time.eps}
-        \caption{The time comparison of PSO at different game difficulty levels.}
-        \label{fig:pso_levels_time}
-    \end{figure}
-
-
-    \section{Results}\label{sec:results}
-    For evaluation of an agent, we ran 30 games against each opponent, leading to 8 averages
-    (one per opponent), of which we computed the harmonic mean which is the final result of the agent.
+  %    \phantom{ }
+    
+    
+    \section{Initial Results}\label{sec:results}
+    For evaluating an agent, we ran $30$ games against each opponent,
+    leading to $8$ averages ($1$ per opponent), of which we computed the harmonic mean,
+    which is the final result for the agent.
+    We use the harmonic mean because it is used for reporting other results for this problem\cite{evoman_competition}.
 
     \subsection{Best Combination of Opponents for Training}\label{subsec:best-combination-of-opponents-for-training}
-    We searched for the opponents that lead to the best results.
-    The first combination of train opponents we considered was \{1, 2, 6, 7\} which was chosen empirically after manually playing against every opponent and chosing the ones which behaved in such a way that covered the most general concepts our agents could learn in our opinion.
-    We observed its final gain as 125.37.
-    We realized a set of exploratory experiments where we would search for other combinations of train opponents,
-    but starting with the resulting model of PPO trained for 1000 epochs on the combination of opponents \{1, 2, 6, 7\}.
-    If by starting with a pre-trained model another combination of train enemies does not lead to better results,
-    then we can believe that the respective combination does not lead to better results than \{1, 2, 6, 7\}.
-    \begin{table}[htbp]
-        \caption{Results for various opponents when starting with a pre-trained PPO model on enemies \{1, 2, 6, 7\}}
-        \begin{center}
-            \begin{tabular}{|c|c|}
-                \hline
-                \textbf{Train opponents}             & {\textbf{gain (harmonic mean)}} \\
-                \hline
-                $\{1, 2, 6, 7\} \cup \{3, 4, 5, 8\}$ & $44.16$                         \\
-                $\{1, 2, 6, 7\} \cup \{3, 4, 6, 7\}$ & $75.3$                          \\
-                $\{1, 2, 6, 7\} \cup \{1, 3, 6, 7\}$ & $110.19$                        \\
-                $\{1, 2, 6, 7\} \cup \{2, 3, 6, 7\}$ & $136.1$                         \\
-                $\{1, 2, 6, 7\} \cup \{2, 4, 6, 7\}$ & $85.22$                         \\
-                \hline
-            \end{tabular}
-            \label{table:variations_of_opponents}
-        \end{center}
-    \end{table}
-    \\
-    The only combination that lead to a better score than 125.37 was \{2, 3, 6, 7\}.
-    We ran an experiment with PPO with random initialization with the combination of train enemies \{2, 3, 6, 7\} and
-    we obtained a final gain of 99.97.
-    This means that we did not find a better combination of train opponents than \{1, 2, 6, 7\}, so it is the one
-    we used for the following experiments.
+    We searched for the best $4$ opponents to serve as a basis for generalization.
+    The first subset considered was $\{1, 2, 6, 7\}$, which was chosen empirically after manually playing against every opponent. We choose the ones which exhibited the most general behaviors our agents could learn, in our opinion. We performed a non-exhaustive search, and found no other $4$-opponent subset better than the human-chosen one.
 
-    \subsection{Random Initialization PPO vs PSO Cascading PPO}\label{subsec:random-initialization-ppo-vs-pso-cascading-ppo}
-    The best PSO configuration was used in cascade before the PPO in 4 runs.
-    PPO with random initialization was ran 3 times.
-    The small number of runs is due to the long run time of the training.
-    The worst result of the PPO with random initialization is higher than the best result
-    of PSO cascaded with PPO\@ (Fig.~\ref{fig:random_vs_pso_initialization}).
+    \subsection{Random Initialization PPO vs Cascading PSO $+$ PPO}\label{subsec:random-initialization-ppo-vs-pso-cascading-ppo}
+    The best PSO configuration was used in cascade before the PPO in $4$ runs.
+    PPO with random initialization was ran $3$ times.
+    The small number of runs is due to the long training time.
+    The worst result of the PPO with random initialization is far better than the best result
+    of PSO cascaded with PPO\@, and we used this large difference to guide our choice, despite the small sample size. (Fig.~\ref{fig:random_vs_pso_initialization}).
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=0.5\textwidth]{images/random_vs_pso_initialization.eps}
         \caption{Gain comparison between PPO with random initialization and with PSO cascading.}
         \label{fig:random_vs_pso_initialization}
     \end{figure}
-    Our explanation for getting worse results when using the technique mentioned above is that the function landscape is very big and PSO doesn't explore enough. Another possible explanation would be that the landscape is tricky when it comes to searching for generalist versus specialized solutions. We could try solving this problem by giving more exploratory power to PSO, but we did not experiment with this due to the lack of time.
 
-    \subsection{PPO on the best configuration}\label{subsec:ppo-on-the-best-configuration}
-    Considering the results above, we decided that PPO with random initialization and enemies \{1, 2, 6, 7\} chosen for training would be the best configuration. We ran 3000 epochs of this configuration, saving all the models along the way after every 250 epochs.
-    After looking at the testing results, we noticed that the final gain is greater after 2000 epochs than after 3000 epochs (Fig.~\ref{fig:ppo_2000_vs_3000_epochs}).
-    This means that there is overfitting during the training.
-    We can conclude that by stopping the PPO algorithm after 2000 epochs instead of 3000 epochs
-    we can end up with more generalized agents that perform better on average against all opponents.
+    \subsection{PPO in the best configuration}\label{subsec:ppo-on-the-best-configuration}
+    Considering the results above, we decided that PPO with random initialization and training enemies $\{1, 2, 6, 7\}$ is the best configuration. We ran $3000$ epochs (chosen \textit{a priori}, considering only our experiences with PPO and general ANNs in other problems) in this configuration, saving all the models along the way after every $250$ epochs - since we anticipated overfit.
+    \textit{After} looking at the testing results, we noticed that the final \textit{test} gain is greater after $2000$ epochs than after $3000$ epochs (Fig.\ref{fig:ppo_2000_vs_3000_epochs}).
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=0.5\textwidth]{images/ppo_2000_vs_3000_epochs.eps}
-        \caption{Gain comparison between PPO after 2000 epochs and after 3000 epochs.}
+        \caption{Gain comparison between PPO after $2000$ epochs and after $3000$ epochs.}
         \label{fig:ppo_2000_vs_3000_epochs}
     \end{figure}
 
-    \begin{figure}[htbp]
-        \centering
-        \includegraphics[width=0.5\textwidth]{images/ppo_gain_evolution_3_runs.eps}
-        \caption{Gain Evolution for PPO in 3 runs, each model was ran 30 times on each opponent for calculating the gains}
-        \label{fig:ppo_gain_evolution_3_runs}
-    \end{figure}
+
 
     \subsection{Best Train Agent vs Best Tested Agent}\label{subsec:best-tested-agent}
-    The best train gain was obtained in the first run of the PPO with random initialization.
-    The train gain was computed as the harmonic mean of the averages per opponent of the 30 games played against
-    the enemies \{1, 2, 6, 7\}.
-    The highest train gain is 198.4.
-    When computed against all opponents, this agent has an overall gain of 117.22.
-    Out of the three PPO with random initialization runs, the highest final gain is 127.01.
-    After the experiments were concluded we also looked at the overall gains of the agents before 3000 epochs (Fig.~\ref{fig:ppo_gain_evolution_3_runs}).
-    For the runs 2 and 3 the snapshots of the models were saved every 250 epochs.
-    In the first run these periodic snapshots start after 2000 epochs.
-    When looking at the results of the intermediary agents we observed that there are some high peaks in test gain.
-    The highest test gain was observed during the third run after 1750 epochs and it has a value of 137.18.
+    The highest training gain is $198.4$.
+    When computed against all opponents, this agent has an overall gain of $117.22$.
+    Out of the $3$ PPO with random initialization runs, the highest test gain is $127.01$ (but they had lower training gains, due to overfit).
+    After the experiments were concluded, we also looked at the overall gains of the agents before $3000$ epochs.
+    The highest test gain was observed during the third run after $1750$ epochs, and it has a value of $137.18$.
 
-    \subsection{Comparison with the Upper Bound}\label{subsec:comparison-with-the-upper-bound}
-    With the PPO algorithm trained on the opponents \{1, 2, 6, 7\} we have
-    beat the best specialized models from the original paper which were given as upper bounds\cite{evoman}.
-
+    We were considerably computation-starved in these experiments; requiring a minimum sample size of $30$ meant we could only try out $3$ different agents. The competition organisers, upon running our algorithm, reported a different (and higher) value than in our experiments, of $138.14$ \cite{evoman_competition_results}.
 
     \begin{table}[htbp]
         \caption{Specialized NEAT vs Generalized PPO (Gain)}
         \begin{center}
             \begin{tabular}{|c|c|c|c|c|c|}
                 \hline
-                \textbf{Opponent} & \multicolumn{4}{|c|}{\textbf{PPO}} & \textbf{Specialized} \\
+                \textbf{Opponent}&\multicolumn{4}{|c|}{\textbf{PPO}}&\textbf{Specialized} \\
                 \cline{2-5}
-                & \textbf{\textit{Run 1}} & \textbf{\textit{Run 2}} & \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} & NEAT \\
+                & \textbf{\textit{Run 1}}& \textbf{\textit{Run 2}}& \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} & NEAT \\
                 \cline{4-5}
-                & 3000 ep            & 3000 ep & 3000 ep & 1750 ep       &        \\
-                & (best at training) &         &         & (best tested) &        \\
+                & $3000$ ep & $3000$ ep & $3000$ ep & $1750$ ep & \\
+                & best train & & & best test & \\
                 \hline
-                1                       & 198.41             & 199.07  & 199.81  & 199.61        & 190.01 \\
-                2                       & 199.74             & 199.27  & 190.34  & 189.14        & 194.01 \\
-                3                       & 58.94              & 46.67   & 70.27   & 85.01         & 180.01 \\
-                4                       & 58.34              & 66.5    & 64.11   & 80.17         & 194.01 \\
-                5                       & 172.61             & 165.65  & 174.61  & 158.83        & 194.01 \\
-                6                       & 195.73             & 196.95  & 195.85  & 194.37        & 173.01 \\
-                7                       & 199.79             & 195.05  & 193.27  & 191.17        & 177.01 \\
-                8                       & 122.17             & 145.49  & 141.89  & 140.61        & 186.01 \\
+                $1$ & $198.41$ & $199.07$ & $199.81$ & $199.61$ & $190.01$ \\
+                $2$ & $199.74$ & $199.27$ & $190.34$ & $189.14$ & $194.01$ \\
+                $3$ & $58.94$  & $46.67$  & $70.27$  & $85.01$  & $180.01$ \\
+                $4$ & $58.34$  & $66.5$   & $64.11$  & $80.17$  & $194.01$ \\
+                $5$ & $172.61$ & $165.65$ & $174.61$ & $158.83$ & $194.01$ \\
+                $6$ & $195.73$ & $196.95$ & $195.85$ & $194.37$ & $173.01$ \\
+                $7$ & $199.79$ & $195.05$ & $193.27$ & $191.17$ & $177.01$ \\
+                $8$ & $122.17$ & $145.49$ & $141.89$ & $140.61$ & $186.01$ \\
                 \hline
-                \textbf{\{1, 2, 6, 7\}} &                    &         &         &               &        \\
-                \textbf{harmonic mean}  & 198.4              & 197.57  & 194.75  & 193.49        & 183.09 \\
-                \hline
-                \textbf{final}          &                    &         &         &               &        \\
-                \textbf{harmonic mean}  & 117.22             & 114.91  & 127.01  & 137.18        & 185.67 \\
-                \hline
-
+              $\{1, 2, 6, 7\}$ & $198.4$ & $197.57$ & $194.75$ & $193.49$ & $183.09$ \\
+              \hline
+              $\{1,\dots,8\}$  & $117.22$ & $114.91$ & $127.01$ & $137.18$ & $185.67$ \\
+              \hline
             \end{tabular}
             \label{tab1}
         \end{center}
@@ -497,190 +351,139 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 
     \begin{table}[htbp]
-        \caption{Specialized NEAT vs Generalized PPO (Percentage of games won)}
+        \caption{Specialized NEAT vs Generalized PPO (Percentage of games lost)}
         \begin{center}
             \begin{tabular}{|c|c|c|c|c|}
                 \hline
-                \textbf{Opponent} & \multicolumn{4}{|c|}{\textbf{PPO}} \\
+                \textbf{Opponent}&\multicolumn{4}{|c|}{\textbf{PPO}} \\
                 \cline{2-5}
-                & \textbf{\textit{Run 1}} & \textbf{\textit{Run 2}} & \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} \\
+                & \textbf{\textit{Run 1}}& \textbf{\textit{Run 2}}& \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} \\
                 \cline{4-5}
-                & 3000 ep            & 3000 ep & 3000 ep & 1750 ep       \\
-                & (best at training) &         &         & (best tested) \\
+                & $3000$ ep & $3000$ ep & $3000$ ep & $1750$ ep\\
+                & best train & & & best test \\
                 \hline
-                1 & 100                & 100     & 100     & 100           \\
-                2 & 100                & 100     & 100     & 100           \\
-                3 & 3.33               & 0       & 3.33    & 46.66         \\
-                4 & 0                  & 6.66    & 0       & 6.66          \\
-                5 & 100                & 96.66   & 100     & 100           \\
-                6 & 100                & 100     & 100     & 100           \\
-                7 & 100                & 93.33   & 100     & 100           \\
-                8 & 80                 & 100     & 96.66   & 90            \\
+                $1$ & $0$     & $0$    & $0$     & $0$   \\
+                $2$ & $0$     & $0$    & $0$     & $0$   \\
+                $3$ & $96.67$ & $100$  & $96.67$ & $53.3$ \\
+                $4$ & $100$   & $93.3$ & $100$   & $93.3$  \\
+                $5$ & $0$     & $3.3$  & $0$     & $0$   \\
+                $6$ & $0$     & $0$    & $0$     & $0$   \\
+                $7$ & $0$     & $6.67$ & $0$     & $0$   \\
+                $8$ & $20$    & $0$    & $3.3$   & $10$    \\
                 \hline
 
             \end{tabular}
         \end{center}
     \end{table}
 
-    \begin{table}[htbp]
-        \caption{Average player and enemy life. Average game duration}
-        \begin{center}
-            \begin{tabular}{|c|c|c|c|c|c|c|}
-                \hline
-                \textbf{Opponent} & \multicolumn{3}{|c|}{\textbf{Best train agent}} & \multicolumn{3}{|c|}{\textbf{Best test agent}} \\
-                \cline{2-7}
-                & \textbf{\textit{Avg player life}} & \textbf{\textit{Avg enemy life}} & \textbf{\textit{Avg duration}} & \textbf{\textit{Avg player life}} & \textbf{\textit{Avg enemy life}} & \textbf{\textit{Avg duration}} \\
-                \hline
-                1                & 97.26                             & 0                                & 159.63                         & 100                               & 0                                & 174.23                         \\
-                2                & 98.33                             & 0                                & 176.6                          & 89.73                             & 0                                & 186.43                         \\
-                3                & 0.13                              & 43.33                            & 457.26                         & 7.66                              & 21.33                            & 410.53                         \\
-                4                & 0                                 & 37.66                            & 547.5                          & 1.84                              & 21.66                            & 736.83                         \\
-                5                & 71.32                             & 0                                & 379.13                         & 60.52                             & 0                                & 367.93                         \\
-                6                & 96.32                             & 0                                & 165.06                         & 95                                & 0                                & 203.53                         \\
-                7                & 99.74                             & 0                                & 162.06                         & 85.9                              & 0                                & 135.13                         \\
-                8                & 34.3                              & 6                                & 520.93                         & 38.76                             & 2                                & 443.6                          \\
-                \hline
-                \textbf{Average} & 62.17                             & 10.87                            & 321.02                         & 59.92                             & 5.62                             & 332.27                         \\
-            \end{tabular}
-        \end{center}
-    \end{table}
+%    \begin{table}[!htbp]
+%        \caption{Average player and enemy life. Average game duration (in frames)}
+%        \begin{center}
+%            \begin{tabular}{|c|c|c|c|c|c|c|}
+%                \hline
+%                \textbf{Opp}&\multicolumn{3}{|c|}{\textbf{Best train agent}}&\multicolumn{3}{|c|}{\textbf{Best test agent}} \\
+%                \cline{2-7}
+%                & \textbf{\textit{pl. life}}& \textbf{\textit{opp. life}}& \textbf{\textit{frames}} & \textbf{\textit{pl. life}}& \textbf{\textit{opp. life}}& \textbf{\textit{frames}} \\
+%              \hline
+%              1 & 97.26 &     0 &  159.63 &    100 &     0 &  174.23 \\
+%              2 & 98.33 &     0 &   176.6 &  89.73 &     0 &  186.43 \\
+%              3 &  0.13 & 43.33 &  457.26 &   7.66 & 21.33 &  410.53 \\
+%              4 &     0 & 37.66 &   547.5 &   1.84 & 21.66 &  736.83 \\
+%              5 & 71.32 &     0 &  379.13 &  60.52 &     0 &  367.93 \\
+%              6 & 96.32 &     0 &  165.06 &     95 &     0 &  203.53 \\
+%              7 & 99.74 &     0 &  162.06 &   85.9 &     0 &  135.13 \\
+%              8 &  34.3 &     6 &  520.93 &  38.76 &     2 &   443.6 \\ \hline
+%              \textbf{Avg} & 62.17 & 10.87 & 321.02 & 59.92 & 5.62 & 332.27 \\
+%              \hline
+%            \end{tabular}
+%        \end{center}
+%    \end{table}
 
-    \subsection{Specialized PPO}\label{subsec:specialized-ppo}
-    In order to obtain a score higher than the upper bound we have tried two methods:
+
+
+    \section{Increasing the Upper Bound}\label{subsec:increasing-the-upper-bound}
+    Our PPO implementation wasn't able to generalise sufficiently, neither in the competition (where our gain of $138.14$ was below the best gain of $146.88$)\cite{evoman_competition_results}, nor in our own tests. Overfitting was a significant problem, and we believe it to be a good indicator of our issues.
+    
+    However, with the PPO trained on opponents $\{1, 2, 6, 7\}$, we have surpassed the best specialised opponent-specific models from the original paper, which were given as upper bounds\cite{evoman}. Thus, we can understand this issue as an exploration versus exploitation trade-off: while we haven't been able to develop the best exploratory, generalising model, we seem to have found a very good exploitative, targeted solution.
+
+    As such, we've performed $3$ further experiments which:
     \begin{itemize}
-        \item A generalized PPO agent trained against all $8$ opponents.
-        \item A specialized PPO agent for each of the $8$ opponents.
+    \item develop a unified model for opponents $\{1, \dots, 8\}$, training on opponents $\{1, \dots, 8\}$, at difficulty $2$.
+    \item develop a unified model for opponents $\{1, \dots, 8\}$, training on opponents $\{1, \dots, 8\}$, at difficulties $\{1, \dots, 5\}$.
+    \item develop individual models for each opponent, training on each respective opponent, at difficulty $2$.
     \end{itemize}
 
-    \subsubsection{PPO trained against all opponents}
-    At the default difficulty of 2, a PPO agent trained against all opponents
-    obtained a final gain of 185.57, being lower with 0.1 than the
-    upper bound found with specialized NEAT\@.
-    For such an agent we have also studied how its gain changes when the difficulty
-    is modified.
+    We shall call the unified model ``generalised'' and the individual model(s) ``specialised''.
+
+    Beyond these changes in aim, we haven't modified the above-described PPO algorithm employed.
+
+    \subsection{Single difficulty}
+    
+    \begin{table}[htbp]
+        \caption{PPO generalised vs PPO specialised vs NEAT specialised, difficulty $= 2$}
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                \textbf{Opponent}&\textbf{PPO gen.}&\textbf{PPO spec.}&\textbf{NEAT spec.} \\
+                \hline
+                 1 &  199.54 &  199.67 &  190.01 \\
+                 2 &  200.01 &  199.61 &  194.01 \\
+                 3 &  194.81 &  199.94 &  180.01 \\
+                 4 &  180.61 &  195.95 &  194.01 \\
+                 5 &  187.77 &  198.03 &  194.01 \\
+                 6 &  174.43 &  199.67 &  173.01 \\
+                 7 &  183.07 &  197.73 &  177.01 \\
+                 8 &  169.31 &  195.07 &  186.01 \\
+                \hline
+                \textbf{harmonic mean} & 185.57 & 198.19 & 185.67 \\
+                \hline
+            \end{tabular}
+            \label{PPO generalized vs specialized vs NEAT}
+        \end{center}
+    \end{table}    
+
+    The specialised PPO was able to surpass the specialised NEAT\cite{evoman} algorithm, both in harmonic mean and in each individual case (Table \ref{PPO generalized vs specialized vs NEAT}). The specialised PPO agents were trained for $1000$ epochs, as they achieved excellent results.
+
+    Additionally, PPO was able to create a general model which is extremely close (a $0.1$ gain difference) in harmonic mean to the results of the $8$ specialised models evolved through NEAT.
+    
+    \subsection{Multiple difficulties}
+
     \begin{figure}[htbp]
-        \centering
-        \includegraphics[width=0.5\textwidth]{images/general_harmonic_gain.eps}
-        \caption{Gain Evolution for PPO when trained against all 8 opponents.}
-        \label{fig:ppo_train_8}
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/general_harmonic_gain.eps}
+    \caption{Gain Evolution for PPO when trained against all 8 opponents. (In case of grayscale viewing: the plots are fully sorted, with difficulty $1$ being the highest, and difficulty $5$ the lowest.)}
+    \label{fig:ppo_train_8}
     \end{figure}
 
     \begin{table}[htbp]
-        \caption{PPO trained against all opponents (Gain)}
+        \caption{PPO (generalised) trained against all opponents (Gain)}
         \begin{center}
             \begin{tabular}{|c|c|c|c|c|c|}
                 \hline
-                \textbf{Opponent} & \multicolumn{5}{|c|}{\textbf{Difficulty}} \\
+                \textbf{Opponent}&\multicolumn{5}{|c|}{\textbf{Difficulty}} \\
                 \cline{2-6}
-                & \textbf{\textit{1}} & \textbf{\textit{2}} & \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
+                & \textbf{\textit{1}}& \textbf{\textit{2}}& \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
                 \hline
-                1                      & 200.01              & 199.54              & 170.75              & 155.48              & 41.08               \\
-                2                      & 200.01              & 200.01              & 182.81              & 168.81              & 168.51              \\
-                3                      & 199.38              & 194.81              & 164.31              & 127.54              & 130.61              \\
-                4                      & 186.14              & 180.61              & 154.23              & 181.58              & 60.28               \\
-                5                      & 196.56              & 187.77              & 185.34              & 142.41              & 158.31              \\
-                6                      & 196.35              & 174.43              & 179.19              & 23.84               & 9.88                \\
-                7                      & 199.26              & 183.07              & 95.40               & 8.01                & 8.28                \\
-                8                      & 196.57              & 169.31              & 123.00              & 41.34               & 10.01               \\
+                 1 &  200.01 &  199.54 &  170.75 &  155.48 &   41.08\\
+                 2 &  200.01 &  200.01 &  182.81 &  168.81 &  168.51\\
+                 3 &  199.38 &  194.81 &  164.31 &  127.54 &  130.61\\
+                 4 &  186.14 &  180.61 &  154.23 &  181.58 &   60.28\\
+                 5 &  196.56 &  187.77 &  185.34 &  142.41 &  158.31\\
+                 6 &  196.35 &  174.43 &  179.19 &   23.84 &    9.88\\
+                 7 &  199.26 &  183.07 &   95.40 &    8.01 &    8.28\\
+                 8 &  196.57 &  169.31 &  123.00 &   41.34 &   10.01\\
                 \hline
-                \textbf{harmonic mean} & 196.68              & 185.57              & 149.57              & 35.76               & 20.89               \\
+                \textbf{harmonic mean} & 196.68 & 185.57 & 149.57 & 35.76 & 20.89 \\
                 \hline
             \end{tabular}
             \label{PPO against all opponents gain}
         \end{center}
     \end{table}
 
-    \begin{table}[htbp]
-        \caption{PPO trained against all opponents (percent games lost)}
-        \begin{center}
-            \begin{tabular}{|c|c|c|c|c|c|}
-                \hline
-                \textbf{Opponent} & \multicolumn{5}{|c|}{\textbf{Difficulty}} \\
-                \cline{2-6}
-                & \textbf{\textit{1}} & \textbf{\textit{2}} & \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
-                \hline
-                1 & 0                   & 0                   & 20                  & 23.33               & 100                 \\
-                2 & 0                   & 0                   & 0                   & 0                   & 0                   \\
-                3 & 0                   & 0                   & 0                   & 13.33               & 3.33                \\
-                4 & 0                   & 0                   & 0                   & 0                   & 60                  \\
-                5 & 0                   & 0                   & 0                   & 0                   & 0                   \\
-                6 & 0                   & 0                   & 0                   & 100                 & 100                 \\
-                7 & 0                   & 0                   & 56.66               & 100                 & 100                 \\
-                8 & 0                   & 0                   & 10                  & 100                 & 100                 \\
-                \hline
-            \end{tabular}
-            \label{PPO against all opponents games lost}
-        \end{center}
-    \end{table}
-
-    \subsubsection{A PPO agent for each opponent}
-    In the second attempt to outscore the upper bound we have trained an agent
-    for each of the $8$ opponents.
-    Due to the high computational time this experiment was done only at
-    difficulty 2 and the number of training epochs for PPO was decreased from 3000 to 1000.
-    It won all its games against all opponents at difficulty 2.
-    \begin{table}[htbp]
-        \caption{PPO generalized vs PPO specialized vs NEAT specialized}
-        \begin{center}
-            \begin{tabular}{|c|c|c|c|}
-                \hline
-                \textbf{Opponent}      & \textbf{PPO g.} & \textbf{PPO s.} & \textbf{NEAT s.} \\
-                \hline
-                1                      & 199.54          & 199.67          & 190.01           \\
-                2                      & 200.01          & 199.61          & 194.01           \\
-                3                      & 194.81          & 199.94          & 180.01           \\
-                4                      & 180.61          & 195.95          & 194.01           \\
-                5                      & 187.77          & 198.03          & 194.01           \\
-                6                      & 174.43          & 199.67          & 173.01           \\
-                7                      & 183.07          & 197.73          & 177.01           \\
-                8                      & 169.31          & 195.07          & 186.01           \\
-                \hline
-                \textbf{harmonic mean} & 185.57          & 198.19          & 185.67           \\
-                \hline
-            \end{tabular}
-            \label{PPO generalized vs specialized vs NEAT}
-        \end{center}
-    \end{table}
-
-    \subsection{Specialized PPO at difficulty 5}\label{subsec:specialized-ppo-at-difficulty-5}
-    A PPO agent for each opponent.
-    1000 training epochs per opponent.
-    (10 million frames for each opponent).
-    Harmonic mean of gains is 154.58.
-    \begin{table}[htbp]
-        \caption{Specialized PPO at difficulty 5}
-        \begin{center}
-            \begin{tabular}{|c|c|c|}
-                \hline
-                \textbf{Opponent} & \textbf{Gain} & \textbf{Percent games lost} \\
-                \hline
-                1                 & 166.01        & 13.33                       \\
-                2                 & 197.18        & 0.00                        \\
-                3                 & 72.28         & 100.00                      \\
-                4                 & 191.23        & 0.00                        \\
-                5                 & 196.71        & 0.00                        \\
-                6                 & 198.76        & 0.00                        \\
-                7                 & 176.01        & 0.00                        \\
-                8                 & 172.61        & 0.00                        \\
-                \hline
-            \end{tabular}
-            \label{PPO generalized at difficulty 5}
-        \end{center}
-    \end{table}
-
-    \subsection{Time Analysis}\label{subsec:time-analysis}
-    Since the match time is relevant, the machine on which the games were run is also relevant.
-    The tests were run on an i7 4750HQ processor.
-    The training was done on 3 threads.
-    All computations were done on the CPU\@.
-    The median game time during training is 28 seconds.
-    The average number of frames per game is 287.
-
-    \subsection{Specialized PPO at multiple difficulties}\label{subsec:specialized-ppo-at-multiple-difficulties}
 
     \begin{table}[htbp]
-        \caption{Specialized PPO against multiple difficulties (gain)}
-        \begin{center}
+      \caption{PPO (specialised), trained $1000$ epochs (gain)}
+              \begin{center}
             \begin{tabular}{|c|c|c|c|c|}
                 \hline
                 \textbf{Opponent} & \multicolumn{4}{|c|}{\textbf{Difficulty}} \\
@@ -701,67 +504,99 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
             \end{tabular}
             \label{Specialized PPO against multiple difficulties (gain)}
         \end{center}
-    \end{table}
-
-    \begin{figure}[htbp]
-        \centering
-        \includegraphics[width=0.5\textwidth]{images/specialized_ppo_harmonic_gain_per_diff.eps}
-        \caption{Harmonic Gain of specialized PPO at multiple difficulties.}
-        \label{fig:specialized_ppo_harmonic_gain_per_diff}
-    \end{figure}
-
-    \begin{figure}[htbp]
-        \centering
-        \includegraphics[width=0.5\textwidth]{images/specialized_ppo_gain_per_diff_per_opp.eps}
-        \caption{Gain of specialized PPO at multiple difficulties for each opponent.}
-        \label{fig:specialized_ppo_gain_per_diff_per_opp}
-    \end{figure}
-
+        \end{table}
+    
     \begin{table}[htbp]
-        \caption{Specialized PPO against multiple difficulties (percentage games lost)}
+        \caption{PPO - percentage of games lost}
         \begin{center}
-            \begin{tabular}{|c|c|c|c|c|}
+            \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
                 \hline
-                \textbf{Opponent} & \multicolumn{4}{|c|}{\textbf{Difficulty}} \\
-                \cline{2-5}
-                & \textbf{\textit{2}} & \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
+              \textbf{Opp.}&\multicolumn{9}{|c|}{\textbf{Difficulty}} \\
+              \cline{2-10}
+                           & \multicolumn{5}{|c|}{Generalised} & \multicolumn{4}{|c|}{Specialised} \\
+              \cline{2-10}
+                & \textbf{\textit{1}}& \textbf{\textit{2}}& \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} & \textbf{\textit{2}}& \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}}\\
                 \hline
-                1 & 0.00                & 0.00                & 0.00                & 13.33               \\
-                2 & 0.00                & 0.00                & 0.00                & 0.00                \\
-                3 & 0.00                & 0.00                & 36.67               & 100.00              \\
-                4 & 0.00                & 0.00                & 0.00                & 0.00                \\
-                5 & 0.00                & 0.00                & 0.00                & 0.00                \\
-                6 & 0.00                & 0.00                & 0.00                & 0.00                \\
-                7 & 0.00                & 0.00                & 0.00                & 0.00                \\
-                8 & 0.00                & 0.00                & 0.00                & 0.00                \\
+                 1 &  0 &  0 &     20 &  23.33 &   100 & 0 & 0 & 0     & 13.33 \\
+                 2 &  0 &  0 &      0 &      0 &     0 & 0 & 0 & 0     & 0 \\
+                 3 &  0 &  0 &      0 &  13.33 &  3.33 & 0 & 0 & 36.67 & 100 \\
+                 4 &  0 &  0 &      0 &      0 &    60 & 0 & 0 & 0     & 0 \\
+                 5 &  0 &  0 &      0 &      0 &     0 & 0 & 0 & 0     & 0 \\
+                 6 &  0 &  0 &      0 &    100 &   100 & 0 & 0 & 0     & 0 \\
+                 7 &  0 &  0 &  56.66 &    100 &   100 & 0 & 0 & 0     & 0 \\
+                 8 &  0 &  0 &     10 &    100 &   100 & 0 & 0 & 0     & 0 \\
                 \hline
             \end{tabular}
-            \label{Specialized PPO against multiple difficulties (percentage games lost)}
+            \label{PPO against all opponents games lost}
         \end{center}
     \end{table}
 
+    Since our generalised PPO model is very close to the previous upper bound, we believe our single-model, all-opponent, all-difficulty exploration should provide a good estimation of what constitutes a good result on all difficulty levels.
 
+    At difficulty $5$, with opponent-specific models (Table \ref{Specialized PPO against multiple difficulties (gain)}) we also establish a good upper bound. $4$ opponents are easily defeated, and a single opponents proves difficult.
+  
     \section{Conclusions}\label{sec:conclusions}
-    After observing that the sparse methods were better than the iterative ones,
-    PPO with random initialization is better than PSO cascaded with PPO and
-    PPO with random initialization trained on four opponents leads to better train results
-    than specialized agents trained with NEAT we can conclude that the problem space is in such a
-    way that the methods with a greedy bias are moving away from the global optimum.
+    \subsection{Upper Bound}
+    As stated previously, interpreting the initial issue as an exploration versus exploitation trade-off allowed us to repurpose the PPO algorithm. While it wasn't neither exploratory nor flexible enough to provide the best generalisation from $4$ opponents to $8$, it was exploitative enough to significantly increase the opponent-specific upper bound.
+   
+    Even with a more modest $1000$-epoch runtime, the specialised PPO is able to easily exceed the previous upper bound\cite{evoman}, and approach the maximum gain of $200.01$. In fact, it does so for opponent $2$, apparently the easiest for our algorithm to defeat, according to Table \ref{PPO against all opponents gain}.
+
+    This previous upper-bound was established with a specialised (one model per opponent) NEAT algorithm, and we feel the comparison is fair: matching specialised algorithm to specialised algorithm.
+
+    While the previous upper bound does not have a time estimate attached to it, given our experience with both methods, we believe our proposed algorithm to be slower than NEAT, due to NEAT's ability to change, and minimse, the structure of the evolved ANN, and its ability to make larger exploratory jumps. For instance, establishing specialised upper bounds for each difficulty (Table \ref{Specialized PPO against multiple difficulties (gain)}) required $10$ million Evoman frames (accumulated during $1000$ training epochs) per opponent, per difficulty level.
+
+    The single-model, all-opponent PPO seems to match the previous upper bound; given the gain range of $[0, 200.01]$, and the range the results take values in, we believe that a difference of $0.1$ is not significant. Thus, we show that a single model can perform very well against all $8$ opponents (how an algorithm might generalise such a model from fewer opponents to all opponents remains an open, difficult problem).
+
+    We feel this is an important result: while the initial upper bound\cite{evoman} provided $8$ separate models to deal with $8$ opponents, we show that there exists a single model which is, in harmonic mean, just as good. We also believe that there is room for improvement for opponent-generalising algorithms. For the first statement, we have proof-by-existence: if our PPO found the model, then it most certainly exists, and is possible to achieve through other algorithms. The second statement - belief - we cannot prove yet; it would require showing that the behaviour patterns learned on one opponent can be applied to others, to a very high degree.
+
+    \subsection{Other Difficulty Levels}
+    In both our PSO (Fig. \ref{fig:pso_levels}) and PPO (Table \ref{PPO against all opponents gain}) explorations, we have found the game difficulty to matter a great deal. The generalised PPO, while inferior to the opponent-specialised PPO models in most cases, does establish the upper bound for opponent $3$ (Tables \ref{PPO against all opponents gain} and \ref{Specialized PPO against multiple difficulties (gain)}).
+
+    We'd like to propose difficulty $3$ as an interesting problem in itself. As shown in Fig. \ref{fig:ppo_train_8}, PPO shows the greatest improvement there, from the first to the last epoch. Difficulties $1$ and $2$ are  easier to solve, while $4$ and $5$ are currently very difficult - but all $4$ show relatively flat improvement curves. Algorithms playing Evoman at difficulty $3$ could show the greatest variance in results and further guide our algorithm-crafting decisions.
+
+    \subsection{Future Work}
+
+    We believe that, given the difficulty of the generalisation problem, pushing for greater exploration, while retaining our current level of exploitation are both required. We've attempted this with the $2$-stage cascade ensemble method, but we believe now that separating the exploratory and exploitative stages was a mistake (guided by our limited computational resources). The game is too difficult for the best strategies to be \textit{local} refinements of simple strategies. In other words, our results show that the function landscape contains multiple wider, shallower strictly-local optima basins, while the attraction basins for global optima are deep and narrow. There is also a degree of optimum dynamics: opponents don't perform the same recipe of actions, but have a limited ability to react to our agent / player.
+
+    Retaining the current level of exploration, while increasing exploitation can be done by greatly increasing the computational resources allocated to solving the problem\cite{nfl}. Based on our results (Fig. \ref{fig:overview}), we recommend a PSO$+$PPO Memetic Algorithm\cite{memetic}. 
+
+    A way to sidestep the increase in computational time could be creating an on-line learning algorithm / agent. Thinking about the problem as a prediction problem - ``if half the opponents behaved in their certain ways, how will the rest behave? '' - , we can have $2$ basic ways of dealing with the prediction. 
+
+    
+%\vfill\null
+    
+%\pagebreak
+
+    
+    We can try to predict the full behaviour of the remaining test opponents ahead of time, or we can try to predict each action-by-action, as we confront them. Despite the increase in algorithmic difficulty for on-line learning, the second problem seems far easier than the first. Building on the previous proposal, we'd advise a sparse PSO$+$PPO Memetic Algorithm. While sparse PPO didn't achieve better results in our exploratory tests, they were evaluated only on basic (simpler, and requiring fewer computational resources) strategies. 
+
+     
+
+    \section{Acknowledgments}
+    We'd like to thank the creators and developers of Evoman for their implementation and documentation efforts. We'd also like to thank Ioana-Teodora Norocea for her editing help.
 
     \begin{thebibliography}{00}
-        \bibitem{evoman_competition} Evoman: Game-playing Competition for WCCI 2020, \url{http://pesquisa.ufabc.edu.br/hal/Evoman.html}
-        \bibitem{evoman} Fabricio Olivetti de Franca, Denis Fantinato, Karine Miras, A.E. Eiben and Patricia A. Vargas.
-        "EvoMan: Game-playing Competition" arXiv:1912.10445
-        \bibitem{karinemiras} de Araújo, Karine da Silva Miras, and Fabrício Olivetti de França.
-        "An electronic-game framework for evaluating coevolutionary algorithms." arXiv:1604.00644 (2016).
-        \bibitem{neuro} Floreano, D., Dürr, P. \& Mattiussi, C. Neuroevolution: from architectures to learning. Evol. Intel. 1, 47–62 (2008). \url{https://doi.org/10.1007/s12065-007-0002-4}
-        \bibitem{capcom} M. MEGA, "Produced by capcom, distributed by capcom, 1987," System: NES.
-        \bibitem{q_learning} Watkins, C.J.C.H., Dayan, P. Q-learning. Machine Learning 8, 279–292 (1992)
-        \bibitem{genetic_algorithm} Holland J.H., Genetic Algorithms and Adaptation. Adaptive Control of Ill-Defined Systems, 1984, Volume 16 ISBN 978-1-4684-8943-9
-        \bibitem{pso} Kennedy, J.; Eberhart, R. (1995). "Particle Swarm Optimization". Proceedings of IEEE International Conference on Neural Networks. IV. pp. 1942–1948.
-        \bibitem{neat} Kenneth O. Stanly; Rist Miikkulainen (2002). "Evolving Neural Networks through Augmenting Topologies". Evolutionary Computation, Volume 10, Issue 2, Summer 2002, p.99-127, \url{https://doi.org/10.1162/106365602320169811}
-        \bibitem{ppo} John Schulman, Filip Wolski, Prafulla Dhariwal, Alex Radford, Oleg Klimov (2017) "Proximal Policy Optimization Algorithms", arXiv:1707.06347v2
-        \bibitem{evoman_blog} Karine Miras, Evoman, \url{https://karinemirasblog.wordpress.com/portfolio/evoman/}
+    \bibitem{evoman_competition} Evoman: Game-playing Competition for WCCI 2020, \url{http://pesquisa.ufabc.edu.br/hal/Evoman.html}
+    \bibitem{evoman_competition_results} Evoman: Game-playing Competition for WCCI 2020, results \url{http://pesquisa.ufabc.edu.br/hal/Evoman.html#results}
+    \bibitem{evoman} Fabricio Olivetti de Franca, Denis Fantinato, Karine Miras, A.E. Eiben and Patricia A. Vargas.
+      "EvoMan: Game-playing Competition" arXiv:1912.10445
+    \bibitem{karinemiras} de Araújo, Karine da Silva Miras, and Fabrício Olivetti de França.
+      "An electronic-game framework for evaluating coevolutionary algorithms." arXiv:1604.00644 (2016).
+    \bibitem{neuro} Floreano, D., Dürr, P. \& Mattiussi, C. Neuroevolution: from architectures to learning. Evol. Intel. 1, 47–62 (2008). \url{https://doi.org/10.1007/s12065-007-0002-4}
+    \bibitem{capcom} M. MEGA, "Produced by capcom, distributed by capcom, 1987," System: NES.
+    \bibitem{q_learning} Watkins, C.J.C.H., Dayan, P. Q-learning. Machine Learning 8, 279–292 (1992)
+    \bibitem{genetic_algorithm} Holland J.H., Genetic Algorithms and Adaptation. Adaptive Control of Ill-Defined Systems, 1984, Volume 16 ISBN 978-1-4684-8943-9
+    \bibitem{pso} Kennedy, J.; Eberhart, R. (1995). "Particle Swarm Optimization". Proceedings of IEEE International Conference on Neural Networks. IV. pp. 1942–1948.
+    \bibitem{neat} Kenneth O. Stanly; Rist Miikkulainen (2002). "Evolving Neural Networks through Augmenting Topologies". Evolutionary Computation, Volume 10, Issue 2, Summer 2002, p.99-127, \url{https://doi.org/10.1162/106365602320169811}
+    \bibitem{ppo} John Schulman, Filip Wolski, Prafulla Dhariwal, Alex Radford, Oleg Klimov (2017) "Proximal Policy Optimization Algorithms", arXiv:1707.06347v2
+    \bibitem{memetic} Moscato, P. (1989). "On Evolution, Search, Optimization, Genetic Algorithms and Martial Arts: Towards Memetic Algorithms". Caltech Concurrent Computation Program (report 826).
+    \bibitem{cybenko} Cybenko, G. (1989). "Approximations by superpositions of sigmoidal functions", Mathematics of Control, Signals, and Systems, 2(4), 303–314. doi:10.1007/BF02551274
+    \bibitem{nfl} Wolpert, D.H., Macready, W.G. (1997), "No Free Lunch Theorems for Optimization", IEEE Transactions on Evolutionary Computation 1, 67.
+    \bibitem{evoman_blog} Karine Miras, Evoman, \url{https://karinemirasblog.wordpress.com/portfolio/evoman/}
+    \bibitem{spinningUp} Joshua Achiam, 2018, ``Spinning Up in Deep Reinforcement Learning'' \url{https://github.com/openai/spinningup}
     \end{thebibliography}
 
 \end{document}
+
+
+
