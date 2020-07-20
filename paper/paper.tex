@@ -25,22 +25,22 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     \title{A Comparison of Algorithms Playing EvoMan}
 
     \author{\IEEEauthorblockN{1\textsuperscript{st} Given Name Surname}
-        \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-            \textit{name of organization (of Aff.)}\\
-            City, Country \\
-            email address or ORCID}
-        \and
-        \IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
-        \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-            \textit{name of organization (of Aff.)}\\
-            City, Country \\
-            email address or ORCID}
-        \and
-        \IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
-        \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-            \textit{name of organization (of Aff.)}\\
-            City, Country \\
-            email address or ORCID}
+    \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+    \textit{name of organization (of Aff.)}\\
+    City, Country \\
+    email address or ORCID}
+    \and
+    \IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
+    \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+    \textit{name of organization (of Aff.)}\\
+    City, Country \\
+    email address or ORCID}
+    \and
+    \IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
+    \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+    \textit{name of organization (of Aff.)}\\
+    City, Country \\
+    email address or ORCID}
     }
 
     \maketitle
@@ -76,6 +76,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     Both the GA and the PSO train the weights of a neural network of a fixed structure.
     Both the GA and the PSO were tested with a sparse approach and an iterative approach.
     For the exploitative stage we used Proximal Policy Optimization\cite{ppo}.
+
 
     \section{Problem Description}\label{sec:problem-description}
 
@@ -390,13 +391,13 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \begin{center}
             \begin{tabular}{|c|c|}
                 \hline
-                \textbf{Train opponents}&{\textbf{gain (harmonic mean)}} \\
+                \textbf{Train opponents}             & {\textbf{gain (harmonic mean)}} \\
                 \hline
-                $\{1, 2, 6, 7\} \cup \{3, 4, 5, 8\}$ & $44.16$ \\
-                $\{1, 2, 6, 7\} \cup \{3, 4, 6, 7\}$ & $75.3$ \\
-                $\{1, 2, 6, 7\} \cup \{1, 3, 6, 7\}$ & $110.19$ \\
-                $\{1, 2, 6, 7\} \cup \{2, 3, 6, 7\}$ & $136.1$ \\
-                $\{1, 2, 6, 7\} \cup \{2, 4, 6, 7\}$ & $85.22$ \\
+                $\{1, 2, 6, 7\} \cup \{3, 4, 5, 8\}$ & $44.16$                         \\
+                $\{1, 2, 6, 7\} \cup \{3, 4, 6, 7\}$ & $75.3$                          \\
+                $\{1, 2, 6, 7\} \cup \{1, 3, 6, 7\}$ & $110.19$                        \\
+                $\{1, 2, 6, 7\} \cup \{2, 3, 6, 7\}$ & $136.1$                         \\
+                $\{1, 2, 6, 7\} \cup \{2, 4, 6, 7\}$ & $85.22$                         \\
                 \hline
             \end{tabular}
             \label{table:variations_of_opponents}
@@ -456,7 +457,6 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     When looking at the results of the intermediary agents we observed that there are some high peaks in test gain.
     The highest test gain was observed during the third run after 1750 epochs and it has a value of 137.18.
 
-
     \subsection{Comparison with the Upper Bound}\label{subsec:comparison-with-the-upper-bound}
     With the PPO algorithm trained on the opponents \{1, 2, 6, 7\} we have
     beat the best specialized models from the original paper which were given as upper bounds\cite{evoman}.
@@ -467,27 +467,27 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \begin{center}
             \begin{tabular}{|c|c|c|c|c|c|}
                 \hline
-                \textbf{Opponent}&\multicolumn{4}{|c|}{\textbf{PPO}}&\textbf{Specialized} \\
+                \textbf{Opponent} & \multicolumn{4}{|c|}{\textbf{PPO}} & \textbf{Specialized} \\
                 \cline{2-5}
-                & \textbf{\textit{Run 1}}& \textbf{\textit{Run 2}}& \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} & NEAT \\
+                & \textbf{\textit{Run 1}} & \textbf{\textit{Run 2}} & \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} & NEAT \\
                 \cline{4-5}
-                & 3000 ep & 3000 ep & 3000 ep & 1750 ep & \\
-                & (best at training) & & & (best tested) & \\
+                & 3000 ep            & 3000 ep & 3000 ep & 1750 ep       &        \\
+                & (best at training) &         &         & (best tested) &        \\
                 \hline
-                1 & 198.41 & 199.07 & 199.81 & 199.61 & 190.01 \\
-                2 & 199.74 & 199.27 & 190.34 & 189.14 & 194.01 \\
-                3 & 58.94 & 46.67 & 70.27 & 85.01 & 180.01 \\
-                4 & 58.34 & 66.5 & 64.11 & 80.17 & 194.01 \\
-                5 & 172.61 & 165.65 & 174.61 & 158.83 & 194.01\\
-                6 & 195.73 & 196.95 & 195.85 & 194.37 & 173.01 \\
-                7 & 199.79 & 195.05 & 193.27 & 191.17 & 177.01 \\
-                8 & 122.17 & 145.49 & 141.89 & 140.61 & 186.01 \\
+                1                       & 198.41             & 199.07  & 199.81  & 199.61        & 190.01 \\
+                2                       & 199.74             & 199.27  & 190.34  & 189.14        & 194.01 \\
+                3                       & 58.94              & 46.67   & 70.27   & 85.01         & 180.01 \\
+                4                       & 58.34              & 66.5    & 64.11   & 80.17         & 194.01 \\
+                5                       & 172.61             & 165.65  & 174.61  & 158.83        & 194.01 \\
+                6                       & 195.73             & 196.95  & 195.85  & 194.37        & 173.01 \\
+                7                       & 199.79             & 195.05  & 193.27  & 191.17        & 177.01 \\
+                8                       & 122.17             & 145.49  & 141.89  & 140.61        & 186.01 \\
                 \hline
-                \textbf{\{1, 2, 6, 7\}} & & & & & \\
-                \textbf{harmonic mean} & 198.4 & 197.57 & 194.75 & 193.49 & 183.09 \\
+                \textbf{\{1, 2, 6, 7\}} &                    &         &         &               &        \\
+                \textbf{harmonic mean}  & 198.4              & 197.57  & 194.75  & 193.49        & 183.09 \\
                 \hline
-                \textbf{final} & & & & & \\
-                \textbf{harmonic mean} & 117.22 & 114.91 & 127.01 & 137.18 & 185.67\\
+                \textbf{final}          &                    &         &         &               &        \\
+                \textbf{harmonic mean}  & 117.22             & 114.91  & 127.01  & 137.18        & 185.67 \\
                 \hline
 
             \end{tabular}
@@ -501,21 +501,21 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \begin{center}
             \begin{tabular}{|c|c|c|c|c|}
                 \hline
-                \textbf{Opponent}&\multicolumn{4}{|c|}{\textbf{PPO}} \\
+                \textbf{Opponent} & \multicolumn{4}{|c|}{\textbf{PPO}} \\
                 \cline{2-5}
-                & \textbf{\textit{Run 1}}& \textbf{\textit{Run 2}}& \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} \\
+                & \textbf{\textit{Run 1}} & \textbf{\textit{Run 2}} & \multicolumn{2}{|c|}{\textbf{\textit{Run 3}}} \\
                 \cline{4-5}
-                & 3000 ep & 3000 ep & 3000 ep & 1750 ep\\
-                & (best at training) & & & (best tested) \\
+                & 3000 ep            & 3000 ep & 3000 ep & 1750 ep       \\
+                & (best at training) &         &         & (best tested) \\
                 \hline
-                1 & 100 & 100 & 100 & 100 \\
-                2 & 100 & 100 & 100 & 100 \\
-                3 & 3.33 & 0 & 3.33 & 46.66 \\
-                4 & 0 & 6.66 & 0 & 6.66 \\
-                5 & 100 & 96.66 & 100 & 100 \\
-                6 & 100 & 100 & 100 & 100 \\
-                7 & 100 & 93.33 & 100 & 100 \\
-                8 & 80 & 100 & 96.66 & 90 \\
+                1 & 100                & 100     & 100     & 100           \\
+                2 & 100                & 100     & 100     & 100           \\
+                3 & 3.33               & 0       & 3.33    & 46.66         \\
+                4 & 0                  & 6.66    & 0       & 6.66          \\
+                5 & 100                & 96.66   & 100     & 100           \\
+                6 & 100                & 100     & 100     & 100           \\
+                7 & 100                & 93.33   & 100     & 100           \\
+                8 & 80                 & 100     & 96.66   & 90            \\
                 \hline
 
             \end{tabular}
@@ -527,20 +527,20 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \begin{center}
             \begin{tabular}{|c|c|c|c|c|c|c|}
                 \hline
-                \textbf{Opponent}&\multicolumn{3}{|c|}{\textbf{Best train agent}}&\multicolumn{3}{|c|}{\textbf{Best test agent}} \\
+                \textbf{Opponent} & \multicolumn{3}{|c|}{\textbf{Best train agent}} & \multicolumn{3}{|c|}{\textbf{Best test agent}} \\
                 \cline{2-7}
-                & \textbf{\textit{Avg player life}}& \textbf{\textit{Avg enemy life}}& \textbf{\textit{Avg duration}} & \textbf{\textit{Avg player life}}& \textbf{\textit{Avg enemy life}}& \textbf{\textit{Avg duration}} \\
+                & \textbf{\textit{Avg player life}} & \textbf{\textit{Avg enemy life}} & \textbf{\textit{Avg duration}} & \textbf{\textit{Avg player life}} & \textbf{\textit{Avg enemy life}} & \textbf{\textit{Avg duration}} \\
                 \hline
-                1 & 97.26 &     0 &  159.63 &    100 &     0 &  174.23 \\
-                2 & 98.33 &     0 &   176.6 &  89.73 &     0 &  186.43 \\
-                3 &  0.13 & 43.33 &  457.26 &   7.66 & 21.33 &  410.53 \\
-                4 &     0 & 37.66 &   547.5 &   1.84 & 21.66 &  736.83 \\
-                5 & 71.32 &     0 &  379.13 &  60.52 &     0 &  367.93 \\
-                6 & 96.32 &     0 &  165.06 &     95 &     0 &  203.53 \\
-                7 & 99.74 &     0 &  162.06 &   85.9 &     0 &  135.13 \\
-                8 &  34.3 &     6 &  520.93 &  38.76 &     2 &   443.6 \\
+                1                & 97.26                             & 0                                & 159.63                         & 100                               & 0                                & 174.23                         \\
+                2                & 98.33                             & 0                                & 176.6                          & 89.73                             & 0                                & 186.43                         \\
+                3                & 0.13                              & 43.33                            & 457.26                         & 7.66                              & 21.33                            & 410.53                         \\
+                4                & 0                                 & 37.66                            & 547.5                          & 1.84                              & 21.66                            & 736.83                         \\
+                5                & 71.32                             & 0                                & 379.13                         & 60.52                             & 0                                & 367.93                         \\
+                6                & 96.32                             & 0                                & 165.06                         & 95                                & 0                                & 203.53                         \\
+                7                & 99.74                             & 0                                & 162.06                         & 85.9                              & 0                                & 135.13                         \\
+                8                & 34.3                              & 6                                & 520.93                         & 38.76                             & 2                                & 443.6                          \\
                 \hline
-                \textbf{Average} & 62.17 & 10.87 & 321.02 & 59.92 & 5.62 & 332.27 \\
+                \textbf{Average} & 62.17                             & 10.87                            & 321.02                         & 59.92                             & 5.62                             & 332.27                         \\
             \end{tabular}
         \end{center}
     \end{table}
@@ -559,10 +559,10 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     For such an agent we have also studied how its gain changes when the difficulty
     is modified.
     \begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\textwidth]{images/general_harmonic_gain.eps}
-    \caption{Gain Evolution for PPO when trained against all 8 opponents.}
-    \label{fig:ppo_train_8}
+        \centering
+        \includegraphics[width=0.5\textwidth]{images/general_harmonic_gain.eps}
+        \caption{Gain Evolution for PPO when trained against all 8 opponents.}
+        \label{fig:ppo_train_8}
     \end{figure}
 
     \begin{table}[htbp]
@@ -570,20 +570,20 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \begin{center}
             \begin{tabular}{|c|c|c|c|c|c|}
                 \hline
-                \textbf{Opponent}&\multicolumn{5}{|c|}{\textbf{Difficulty}} \\
+                \textbf{Opponent} & \multicolumn{5}{|c|}{\textbf{Difficulty}} \\
                 \cline{2-6}
-                & \textbf{\textit{1}}& \textbf{\textit{2}}& \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
+                & \textbf{\textit{1}} & \textbf{\textit{2}} & \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
                 \hline
-                 1 &  200.01 &  199.54 &  170.75 &  155.48 &   41.08\\
-                 2 &  200.01 &  200.01 &  182.81 &  168.81 &  168.51\\
-                 3 &  199.38 &  194.81 &  164.31 &  127.54 &  130.61\\
-                 4 &  186.14 &  180.61 &  154.23 &  181.58 &   60.28\\
-                 5 &  196.56 &  187.77 &  185.34 &  142.41 &  158.31\\
-                 6 &  196.35 &  174.43 &  179.19 &   23.84 &    9.88\\
-                 7 &  199.26 &  183.07 &   95.40 &    8.01 &    8.28\\
-                 8 &  196.57 &  169.31 &  123.00 &   41.34 &   10.01\\
+                1                      & 200.01              & 199.54              & 170.75              & 155.48              & 41.08               \\
+                2                      & 200.01              & 200.01              & 182.81              & 168.81              & 168.51              \\
+                3                      & 199.38              & 194.81              & 164.31              & 127.54              & 130.61              \\
+                4                      & 186.14              & 180.61              & 154.23              & 181.58              & 60.28               \\
+                5                      & 196.56              & 187.77              & 185.34              & 142.41              & 158.31              \\
+                6                      & 196.35              & 174.43              & 179.19              & 23.84               & 9.88                \\
+                7                      & 199.26              & 183.07              & 95.40               & 8.01                & 8.28                \\
+                8                      & 196.57              & 169.31              & 123.00              & 41.34               & 10.01               \\
                 \hline
-                \textbf{harmonic mean} & 196.68 & 185.57 & 149.57 & 35.76 & 20.89 \\
+                \textbf{harmonic mean} & 196.68              & 185.57              & 149.57              & 35.76               & 20.89               \\
                 \hline
             \end{tabular}
             \label{PPO against all opponents gain}
@@ -595,24 +595,23 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \begin{center}
             \begin{tabular}{|c|c|c|c|c|c|}
                 \hline
-                \textbf{Opponent}&\multicolumn{5}{|c|}{\textbf{Difficulty}} \\
+                \textbf{Opponent} & \multicolumn{5}{|c|}{\textbf{Difficulty}} \\
                 \cline{2-6}
-                & \textbf{\textit{1}}& \textbf{\textit{2}}& \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
+                & \textbf{\textit{1}} & \textbf{\textit{2}} & \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
                 \hline
-                 1 &  0 &  0 &     20 &  23.33 &   100 \\
-                 2 &  0 &  0 &      0 &      0 &     0 \\
-                 3 &  0 &  0 &      0 &  13.33 &  3.33 \\
-                 4 &  0 &  0 &      0 &      0 &    60 \\
-                 5 &  0 &  0 &      0 &      0 &     0 \\
-                 6 &  0 &  0 &      0 &    100 &   100 \\
-                 7 &  0 &  0 &  56.66 &    100 &   100 \\
-                 8 &  0 &  0 &     10 &    100 &   100 \\
+                1 & 0                   & 0                   & 20                  & 23.33               & 100                 \\
+                2 & 0                   & 0                   & 0                   & 0                   & 0                   \\
+                3 & 0                   & 0                   & 0                   & 13.33               & 3.33                \\
+                4 & 0                   & 0                   & 0                   & 0                   & 60                  \\
+                5 & 0                   & 0                   & 0                   & 0                   & 0                   \\
+                6 & 0                   & 0                   & 0                   & 100                 & 100                 \\
+                7 & 0                   & 0                   & 56.66               & 100                 & 100                 \\
+                8 & 0                   & 0                   & 10                  & 100                 & 100                 \\
                 \hline
             \end{tabular}
             \label{PPO against all opponents games lost}
         \end{center}
     \end{table}
-
 
     \subsubsection{A PPO agent for each opponent}
     In the second attempt to outscore the upper bound we have trained an agent
@@ -625,18 +624,18 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \begin{center}
             \begin{tabular}{|c|c|c|c|}
                 \hline
-                \textbf{Opponent}&\textbf{PPO g.}&\textbf{PPO s.}&\textbf{NEAT s.} \\
+                \textbf{Opponent}      & \textbf{PPO g.} & \textbf{PPO s.} & \textbf{NEAT s.} \\
                 \hline
-                 1 &  199.54 &  199.67 &  190.01 \\
-                 2 &  200.01 &  199.61 &  194.01 \\
-                 3 &  194.81 &  199.94 &  180.01 \\
-                 4 &  180.61 &  195.95 &  194.01 \\
-                 5 &  187.77 &  198.03 &  194.01 \\
-                 6 &  174.43 &  199.67 &  173.01 \\
-                 7 &  183.07 &  197.73 &  177.01 \\
-                 8 &  169.31 &  195.07 &  186.01 \\
+                1                      & 199.54          & 199.67          & 190.01           \\
+                2                      & 200.01          & 199.61          & 194.01           \\
+                3                      & 194.81          & 199.94          & 180.01           \\
+                4                      & 180.61          & 195.95          & 194.01           \\
+                5                      & 187.77          & 198.03          & 194.01           \\
+                6                      & 174.43          & 199.67          & 173.01           \\
+                7                      & 183.07          & 197.73          & 177.01           \\
+                8                      & 169.31          & 195.07          & 186.01           \\
                 \hline
-                \textbf{harmonic mean} & 185.57 & 198.19 & 185.67 \\
+                \textbf{harmonic mean} & 185.57          & 198.19          & 185.67           \\
                 \hline
             \end{tabular}
             \label{PPO generalized vs specialized vs NEAT}
@@ -653,16 +652,16 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
         \begin{center}
             \begin{tabular}{|c|c|c|}
                 \hline
-                \textbf{Opponent}&\textbf{Gain}&\textbf{Percent games lost}\\
+                \textbf{Opponent} & \textbf{Gain} & \textbf{Percent games lost} \\
                 \hline
-                 1 &  166.01 &   13.33\\
-                 2 &  197.18 &    0.00\\
-                 3 &   72.28 &  100.00\\
-                 4 &  191.23 &    0.00\\
-                 5 &  196.71 &    0.00\\
-                 6 &  198.76 &    0.00\\
-                 7 &  176.01 &    0.00\\
-                 8 &  172.61 &    0.00\\
+                1                 & 166.01        & 13.33                       \\
+                2                 & 197.18        & 0.00                        \\
+                3                 & 72.28         & 100.00                      \\
+                4                 & 191.23        & 0.00                        \\
+                5                 & 196.71        & 0.00                        \\
+                6                 & 198.76        & 0.00                        \\
+                7                 & 176.01        & 0.00                        \\
+                8                 & 172.61        & 0.00                        \\
                 \hline
             \end{tabular}
             \label{PPO generalized at difficulty 5}
@@ -676,6 +675,71 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     All computations were done on the CPU\@.
     The median game time during training is 28 seconds.
     The average number of frames per game is 287.
+
+    \subsection{Specialized PPO at multiple difficulties}\label{subsec:specialized-ppo-at-multiple-difficulties}
+
+    \begin{table}[htbp]
+        \caption{Specialized PPO against multiple difficulties (gain)}
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|c|}
+                \hline
+                \textbf{Opponent} & \multicolumn{4}{|c|}{\textbf{Difficulty}} \\
+                \cline{2-5}
+                & \textbf{\textit{2}} & \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
+                \hline
+                1                      & 199.68              & 196.51              & 189.21              & 166.01              \\
+                2                      & 199.61              & 199.91              & 199.21              & 197.18              \\
+                3                      & 199.94              & 199.51              & 147.21              & 72.28               \\
+                4                      & 195.95              & 196.14              & 198.81              & 191.23              \\
+                5                      & 198.03              & 193.38              & 191.73              & 196.71              \\
+                6                      & 199.67              & 195.18              & 196.85              & 198.76              \\
+                7                      & 197.73              & 192.45              & 184.85              & 176.01              \\
+                8                      & 195.07              & 185.37              & 178.05              & 172.61              \\
+                \hline
+                \textbf{harmonic mean} & 198.19              & 194.7               & 184.12              & 154.58              \\
+                \hline
+            \end{tabular}
+            \label{Specialized PPO against multiple difficulties (gain)}
+        \end{center}
+    \end{table}
+
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.5\textwidth]{images/specialized_ppo_harmonic_gain_per_diff.eps}
+        \caption{Harmonic Gain of specialized PPO at multiple difficulties.}
+        \label{fig:specialized_ppo_harmonic_gain_per_diff}
+    \end{figure}
+
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.5\textwidth]{images/specialized_ppo_gain_per_diff_per_opp.eps}
+        \caption{Gain of specialized PPO at multiple difficulties for each opponent.}
+        \label{fig:specialized_ppo_gain_per_diff_per_opp}
+    \end{figure}
+
+    \begin{table}[htbp]
+        \caption{Specialized PPO against multiple difficulties (percentage games lost)}
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|c|}
+                \hline
+                \textbf{Opponent} & \multicolumn{4}{|c|}{\textbf{Difficulty}} \\
+                \cline{2-5}
+                & \textbf{\textit{2}} & \textbf{\textit{3}} & \textbf{\textit{4}} & \textbf{\textit{5}} \\
+                \hline
+                1 & 0.00                & 0.00                & 0.00                & 13.33               \\
+                2 & 0.00                & 0.00                & 0.00                & 0.00                \\
+                3 & 0.00                & 0.00                & 36.67               & 100.00              \\
+                4 & 0.00                & 0.00                & 0.00                & 0.00                \\
+                5 & 0.00                & 0.00                & 0.00                & 0.00                \\
+                6 & 0.00                & 0.00                & 0.00                & 0.00                \\
+                7 & 0.00                & 0.00                & 0.00                & 0.00                \\
+                8 & 0.00                & 0.00                & 0.00                & 0.00                \\
+                \hline
+            \end{tabular}
+            \label{Specialized PPO against multiple difficulties (percentage games lost)}
+        \end{center}
+    \end{table}
+
 
     \section{Conclusions}\label{sec:conclusions}
     After observing that the sparse methods were better than the iterative ones,
