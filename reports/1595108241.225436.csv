@@ -1,0 +1,2 @@
+enemy,gain,avg_player_life,avg_enemy_life,avg_duration,min_player_life,max_player_life,min_enemy_life,max_enemy_life,min_duration,max_duration,percentage_games_lost
+2,199.91000000000003,99.9,0.0,252.8,97,100,0,0,230,300,0.0
