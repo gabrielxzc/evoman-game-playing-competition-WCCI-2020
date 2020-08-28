@@ -134,11 +134,6 @@
 \end{frame}
 
 \begin{frame}{Search Algorithms: initial comparison}
-  \begin{tabular}{|c|c|c|c|c|} \hline
-    Method                  & Q-Learning & GA & PSO & Random init.\\ \hline
-    Result (approx. median) & -5         & 46 &  59 & 117    \\ \hline
-  \end{tabular}
-  \pause
   \begin{itemize}
   \item No pre-exploration algorithm performed better than random initialisation.
   \item The game is too difficult for basic strategies to constitute the basis for optimal strategies (a misleading / trap function landscape).
@@ -276,7 +271,7 @@
   \begin{itemize}
   \item We have surpassed the state-of-the-art through an exploitative and time-consuming algorithm.
   \item It is a difficult, misleading problem, since optimal game-playing strategies cannot be easily inferred from suboptimal strategies.
-  \item Thus, the cascade method cannot work well. A memetic algorithm (e.g. GSO + PPO) seems feasible.
+  \item Thus, the cascade method cannot work well. A memetic algorithm (e.g. PSO + PPO) seems feasible.
   \end{itemize}
 \end{frame}
 
