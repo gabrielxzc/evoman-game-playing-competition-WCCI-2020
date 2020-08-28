@@ -52,7 +52,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
       Our team took part in the ``Evoman: Game-playing Competition for WCCI 2020'', and won second place;
       beyond finding a good agent to satisfy the requirements of the competition - which aim at a good ability to generalise -,
       we have surpassed the existing non-general, best-known upper-bound.
-      We have managed to exceed this upper bound with a Proximal Policy Optimization algorithm, by discarding the competition requirements to generalise.
+      We have managed to exceed this upper bound with a Proximal Policy Optimization(PPO) algorithm, by discarding the competition requirements to generalise.
       We also present our other exploratory attempts: Q-learning, Genetic Algorithms, Particle Swarm Optimisation, and their PPO hybridizations. 
       Finally, we map the behaviour of our algorithm in the space of game difficulty, generating plausible extensions to the existing upper-bound.
     \end{abstract}
@@ -67,11 +67,13 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     This paper contains our improvement on the upper-bound for playing the 2D shooting / platformer game Evoman\cite{evoman}.
     Our team took part in the ``Evoman: Game-playing Competition for WCCI 2020''\cite{evoman_competition}. While placing second\cite{evoman_competition_results}, we have managed to exceed the best-known upper-bound. This difference is due to the competition requirements for generalisation; the upper-bound has been provided by the organisers by dropping such requirements, and only by doing the same could we exceed it.
 
-    Our initial exploratory attempts focused on an ensemble, $2$-stage cascade method. The first stage, designed to find good candidate solutions quickly, was either a Q-Learning\cite{q_learning}, a Genetic Algorithm\cite{genetic_algorithm} or Particle Swarm Optimization\cite{pso} algorithm. The candidate solutions are weights on a fixed-structure Artificial Neural Network, which plays the Evoman game. The second stage, aimed at further refining the solutions found by the first stage, is a slower Proximal Policy Optimization\cite{ppo} algorithm.
+    Our initial exploratory attempts focused on an ensemble, $2$-stage cascade method. The first stage, designed to find good candidate solutions quickly, was either a Q-Learning\cite{q_learning}, a Genetic Algorithm\cite{genetic_algorithm} or Particle Swarm Optimization\cite{pso} algorithm. The candidate solutions are weights on a fixed-structure Artificial Neural Network, which plays the Evoman game. The second stage, aimed at further refining the solutions found by the first stage, is a slower Proximal Policy Optimization (PPO)\cite{ppo} algorithm.
 
     However, a simple random initialisation outperforms any of the first-stage algorithms, and the later experiments use PPO alone.
 
     The competition required the algorithm to train with half the opponents in the game, and to test with all of them. Our method shows significant overfit in this challenge. However, its otherwise good performance makes it appropriate for setting a new upper bound, since the upper bound is being computed individually, by training and testing against each opponent in the Evoman game.
+
+    All datapoints from our research are arithmetic averages of $30$ repeats.
 
     \section{Problem Description}\label{sec:problem-description}
 
@@ -108,9 +110,10 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     There is also an extensive documentation
     available\footnote{\url{https://github.com/karinemiras/evoman_framework/blob/master/evoman1.0-doc.pdf}}.
 
+
     \subsection{Problem}\label{subsec:problem}
     How well an agent performs against an enemy is measured by how much damage they inflict, and how much damage to themselves they avoid - or, conversely, how much life points they have remaining, and how much life points the opponent has at the end of the game:
-
+    \vspace{-0.1cm}
     \begin{gather*}
       gain = 100.01 + player\_life - enemy\_life \hspace{1cm} (1)
     \end{gather*}
@@ -126,8 +129,9 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     
     \section{Approach}\label{sec:approach}
     Our initial intention was to develop a cascade ensemble method where a fast algorithm could provide a better starting point to a slower algorithm.
-    We expected the classic Q-learning\cite{q_learning} algorithm to quickly obtain a decent gain. Two more exploratory algorithms we have considered are Genetic Algorithms\cite{genetic_algorithm} and Particle Swarm Optimisation\cite{pso}.
-    The slower algorithm, intended to exploit the starting points provided by the first algorithm in the cascade, is a Proximal Policy Optimization\cite{ppo} algorithm.
+    We expected the classic Q-learning\cite{q_learning} algorithm to quickly obtain a decent gain. Two more exploratory algorithms we have considered are Genetic Algorithms\cite{genetic_algorithm} and Particle Swarm Optimisation\cite{pso}. For our algorithmic parameters, we chose widely-used starting values, performing small-scale experiments to fine-tune them.
+    
+    The slower algorithm, intended to exploit the starting points provided by the first algorithm in the cascade, is a Proximal Policy Optimization\cite{ppo} algorithm. 
 
     To find the best first-stage algorithm we have made the following changes (which had no impact in the training and testing for the final solution to the problem, other than guiding the choice of algorithm):
     \begin{itemize}
@@ -149,7 +153,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     \subsection{Solution structure}
     In all cases, a candidate solution is a fixed-structure feedforward Artificial Neural Network.
 
-    The input and output layers are determined by the game framework. Each game frame gives us $20$ sensor values, and we also remember the past $2$ frames, alongside the movements we've made. Thus, $3 \cdot 20 + 2 = 62$ inputs.
+    The input and output layers are determined by the game framework. Each game frame gives us $20$ sensor values, and we also remember the past $2$ frames, alongside the movements we've made. Thus, $3 \cdot 20 + 2 = 62$ inputs. The ANN has $5$ outputs, corresponding to the $5$ actions accessible to the agent.
 
     We've decided on two hidden layers. At first, we've used $32$ perceptrons on each, but later extended to $64$ (only when using PPO). We haven't increased the number of perceptrons or hidden layers further, since our main issue proved to be overfit, not the ANN's inability to properly approximate the required function\cite{cybenko}.
     The activation function used is the Logistic Sigmoid; each layer has l2 regularisation applied to it, and each weight has a decay of $0.01$.
@@ -174,7 +178,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
     Since we are representing the individuals as bitstrings we were able to apply
     a Simple Genetic Algorithm\cite{genetic_algorithm}.
 
-    \pagebreak
+    %\pagebreak
     
     The configurations we have used for the GA are:
     \begin{itemize}
